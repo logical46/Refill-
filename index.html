@@ -297,16 +297,29 @@
     finalizeSubmission();
   }
 
-  function finalizeSubmission() {
+ function finalizeSubmission() {
     const btn = document.getElementById('submitBtn');
     btn.innerHTML = 'JOINING... <span class="loading"></span>';
     btn.disabled = true;
-    setTimeout(() => {
+
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwoVm_A8eom2PlFSgNy1G6lezGS8Gaxy4uf3mfnI31AlNkbi0Y0NSXhC16zXnXMRvhz/exec';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    })
+    .then(() => {
       document.getElementById('successName').textContent = formData.name;
       goToScreen(7);
       if (!successShown) { launchConfetti(); successShown = true; }
-      console.log('VIP Form Data:', formData);
-    }, 1500);
+    })
+    .catch(() => {
+      document.getElementById('successName').textContent = formData.name;
+      goToScreen(7);
+      if (!successShown) { launchConfetti(); successShown = true; }
+    });
   }
 
   function launchConfetti() {
