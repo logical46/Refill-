@@ -1,280 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Refill — Never Lose a Customer Again</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --green: #1A472A;
-      --green-mid: #2D6A4F;
-      --green-light: #52B788;
-      --gold: #D4AF37;
-      --dark: #080808;
-      --dark2: #0f0f0f;
-      --dark3: #1a1a1a;
-      --white: #ffffff;
-      --grey: #888888;
-      --grey-light: #cccccc;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Refill — Never Lose a Customer Again</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1A472A;
+  --green-mid: #2D6A4F;
+  --green-light: #52B788;
+  --gold: #D4AF37;
+  --dark: #080808;
+  --dark2: #0f0f0f;
+  --dark3: #1a1a1a;
+  --white: #ffffff;
+  --grey: #888888;
+  --grey-light: #cccccc;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; width: 100%; }
 
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 18px 5%;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(8,8,8,0.93); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif; font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 800; letter-spacing: 4px;
+  background: linear-gradient(135deg, var(--green-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: clamp(16px, 3vw, 36px); list-style: none; }
+.nav-links a { color: var(--grey); text-decoration: none; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--green-light), var(--green-mid));
+  color: #000; padding: 10px 20px; border: none; border-radius: 2px;
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; cursor: pointer; text-transform: uppercase; white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(82,183,136,0.3); }
 
-    html {
-      scroll-behavior: smooth;
-    }
+/* HERO */
+.hero {
+  width: 100%; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 130px 5% 80px; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(26,71,42,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 70%, rgba(212,175,55,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 20% 80%, rgba(82,183,136,0.07) 0%, transparent 60%);
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(82,183,136,0.1); border: 1px solid rgba(82,183,136,0.3);
+  border-radius: 100px; padding: 8px 20px;
+  font-size: clamp(9px, 1.5vw, 11px); letter-spacing: 3px; text-transform: uppercase;
+  color: var(--green-light); margin-bottom: 36px;
+  animation: fadeUp 0.8s ease both;
+}
+.dot { width: 6px; height: 6px; background: var(--green-light); border-radius: 50%; animation: blink 2s infinite; flex-shrink: 0; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(38px, 7vw, 96px);
+  font-weight: 800; line-height: 0.95; letter-spacing: -2px; margin-bottom: 28px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.t1 { display: block; color: var(--white); }
+.t2 {
+  display: block;
+  background: linear-gradient(135deg, var(--green-light) 0%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  font-size: clamp(13px, 2vw, 17px); color: var(--grey); max-width: 520px;
+  line-height: 1.75; margin-bottom: 44px; font-weight: 300;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+.hero-btns { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; animation: fadeUp 0.8s 0.3s ease both; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-light), var(--green-mid));
+  color: #000; padding: 16px 36px; border: none; border-radius: 2px;
+  font-family: 'Syne', sans-serif; font-size: clamp(11px, 1.5vw, 13px); font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 8px 32px rgba(82,183,136,0.2);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(82,183,136,0.35); }
+.btn-secondary {
+  background: none; color: var(--grey); padding: 16px 36px; border: 1px solid #2a2a2a; border-radius: 2px;
+  font-family: 'Syne', sans-serif; font-size: clamp(11px, 1.5vw, 13px); font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: #444; color: var(--white); }
+.hero-stats {
+  display: flex; flex-wrap: wrap; gap: clamp(20px, 5vw, 64px); justify-content: center;
+  margin-top: 72px; animation: fadeUp 0.8s 0.4s ease both;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-family: 'Syne', sans-serif; font-size: clamp(26px, 4vw, 40px); font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg, var(--green-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-lbl { font-size: clamp(9px, 1.2vw, 11px); letter-spacing: 2px; color: var(--grey); text-transform: uppercase; margin-top: 6px; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 
-    body {
-      background: var(--dark);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
-      width: 100%;
-    }
+/* DIVIDER */
+.divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 200;
-      padding: 18px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(8, 8, 8, 0.93);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
+/* SECTIONS */
+.section { width: 100%; padding: clamp(56px, 8vw, 100px) 5%; }
+.inner { max-width: 1200px; margin: 0 auto; width: 100%; }
+.sec-label { font-size: clamp(9px, 1.2vw, 10px); letter-spacing: 5px; color: var(--green-light); text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
+.sec-title { font-family: 'Syne', sans-serif; font-size: clamp(26px, 4vw, 50px); font-weight: 800; line-height: 1.05; letter-spacing: -1px; margin-bottom: 16px; }
+.sec-sub { font-size: clamp(13px, 1.5vw, 15px); color: var(--grey); line-height: 1.8; max-width: 460px; font-weight: 300; }
 
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(16px, 2.5vw, 22px);
-      font-weight: 800;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, var(--green-light), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+/* HOW IT WORKS */
+.how-bg { background: var(--dark2); }
+.steps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: rgba(255,255,255,0.04);
+  margin-top: 56px; border: 1px solid rgba(255,255,255,0.04);
+}
+.step { background: var(--dark2); padding: clamp(24px, 3vw, 44px) clamp(18px, 2.5vw, 32px); position: relative; overflow: hidden; transition: background 0.3s; }
+.step:hover { background: rgba(26,71,42,0.18); }
+.step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green-light), var(--gold)); opacity: 0; transition: opacity 0.3s; }
+.step:hover::before { opacity: 1; }
+.step-num { font-family: 'Syne', sans-serif; font-size: clamp(36px, 5vw, 60px); font-weight: 800; color: rgba(255,255,255,0.04); line-height: 1; margin-bottom: 18px; }
+.step-icon { font-size: clamp(22px, 3vw, 30px); margin-bottom: 12px; }
+.step-title { font-family: 'Syne', sans-serif; font-size: clamp(13px, 1.5vw, 17px); font-weight: 700; margin-bottom: 8px; }
+.step-text { font-size: clamp(11px, 1.2vw, 13px); color: var(--grey); line-height: 1.7; }
 
-    .nav-links {
-      display: flex;
-      gap: clamp(16px, 3vw, 36px);
-      list-style: none;
-    }
+/* FEATURES */
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 52px; }
+.feat-card {
+  background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;
+  padding: clamp(22px, 3vw, 38px); transition: all 0.3s; position: relative; overflow: hidden;
+}
+.feat-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green-light), transparent); opacity: 0; transition: opacity 0.3s;
+}
+.feat-card:hover { border-color: rgba(82,183,136,0.25); transform: translateY(-3px); }
+.feat-card:hover::after { opacity: 1; }
+.feat-card.gold::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.feat-card.gold:hover { border-color: rgba(212,175,55,0.25); }
+.feat-icon {
+  width: 46px; height: 46px; border-radius: 4px;
+  background: rgba(82,183,136,0.1); border: 1px solid rgba(82,183,136,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 18px;
+}
+.feat-card.gold .feat-icon { background: rgba(212,175,55,0.1); border-color: rgba(212,175,55,0.2); }
+.feat-title { font-family: 'Syne', sans-serif; font-size: clamp(13px, 1.5vw, 17px); font-weight: 700; margin-bottom: 10px; }
+.feat-text { font-size: clamp(11px, 1.2vw, 13px); color: var(--grey); line-height: 1.7; }
 
-    .nav-links a {
-      color: var(--grey);
-      text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
+/* FLOW */
+.flow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(36px, 6vw, 80px); align-items: center; margin-top: 52px; }
+.flow-visual { background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: clamp(22px, 3vw, 38px); position: relative; overflow: hidden; }
+.flow-visual::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green-light), var(--gold)); }
+.flow-item { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.flow-item:last-child { border-bottom: none; }
+.flow-dot { width: 32px; height: 32px; border-radius: 50%; background: rgba(82,183,136,0.1); border: 1px solid rgba(82,183,136,0.3); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.flow-txt { font-size: clamp(11px, 1.2vw, 13px); color: var(--grey-light); line-height: 1.5; }
+.flow-txt strong { color: var(--white); display: block; font-size: clamp(10px, 1.1vw, 12px); margin-bottom: 1px; }
+.flow-arrow { text-align: center; color: var(--green-light); font-size: 16px; opacity: 0.5; padding: 2px 0; }
 
-    .nav-links a:hover {
-      color: var(--white);
-    }
+/* PRICING */
+.pricing-bg { background: var(--dark2); }
+.pricing-header { text-align: center; margin-bottom: 52px; }
+.pricing-header .sec-sub { margin: 0 auto; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.04); }
+.price-card { background: var(--dark2); padding: clamp(26px, 3vw, 46px) clamp(18px, 2.5vw, 34px); position: relative; }
+.price-card.featured { background: rgba(26,71,42,0.2); border-top: 2px solid var(--green-light); }
+.price-badge { display: inline-block; background: var(--green-light); color: #000; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; padding: 4px 12px; margin-bottom: 18px; font-family: 'Syne', sans-serif; }
+.price-plan { font-family: 'Syne', sans-serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--grey); margin-bottom: 12px; }
+.price-amount { font-family: 'Syne', sans-serif; font-size: clamp(28px, 3vw, 44px); font-weight: 800; margin-bottom: 4px; line-height: 1; }
+.price-amount span { font-size: clamp(13px, 1.5vw, 17px); font-weight: 400; color: var(--grey); }
+.price-setup { font-size: 12px; color: var(--grey); margin-bottom: 24px; }
+.price-div { height: 1px; background: rgba(255,255,255,0.06); margin-bottom: 24px; }
+.price-feats { list-style: none; margin-bottom: 32px; }
+.price-feats li { font-size: clamp(11px, 1.2vw, 13px); color: var(--grey-light); padding: 8px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.price-feats li::before { content: '✓'; color: var(--green-light); font-weight: 700; font-size: 11px; flex-shrink: 0; }
+.price-btn { width: 100%; padding: 14px; border: 1px solid rgba(255,255,255,0.1); background: none; color: var(--white); font-family: 'Syne', sans-serif; font-size: clamp(10px, 1.2vw, 12px); font-weight: 700; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; border-radius: 2px; }
+.price-btn:hover { background: rgba(255,255,255,0.05); }
+.price-btn.feat { background: linear-gradient(135deg, var(--green-light), var(--green-mid)); color: #000; border: none; box-shadow: 0 8px 24px rgba(82,183,136,0.25); }
+.price-btn.feat:hover { transform: translateY(-1px); box-shadow: 0 16px 40px rgba(82,183,136,0.35); }
 
-    .nav-cta {
-      background: linear-gradient(135deg, var(--green-light), var(--green-mid));
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Syne', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      cursor: pointer;
-      text-transform: uppercase;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
+/* FOOTER */
+footer { width: 100%; padding: clamp(36px, 5vw, 56px) 5%; border-top: 1px solid rgba(255,255,255,0.05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.footer-logo { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 4px; background: linear-gradient(135deg, var(--green-light), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.footer-text { font-size: 12px; color: #333; letter-spacing: 1px; }
 
-    .nav-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(82, 183, 136, 0.3);
-    }
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* HERO */
-    .hero {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 130px 5% 80px;
-      position: relative;
-      overflow: hidden;
-    }
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .nav-links { display: none; }
+  .steps-grid { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .flow-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; gap: 16px; background: transparent; }
+  .price-card { border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; }
+  .price-card.featured { border-top: 2px solid var(--green-light); }
+}
+@media (max-width: 580px) {
+  .steps-grid { grid-template-columns: 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 24px; }
+  footer { justify-content: center; text-align: center; }
+  .nav-cta { padding: 8px 14px; font-size: 10px; }
+}
+</style>
+</head>
+<body>
 
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(26,71,42,0.45) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 40% at 80% 70%, rgba(212,175,55,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 30% 30% at 20% 80%, rgba(82,183,136,0.07) 0%, transparent 60%);
-    }
+<nav>
+  <div class="nav-logo">REFILL</div>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started</button>
+</nav>
 
-    .hero > * {
-      position: relative;
-      z-index: 1;
-    }
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge"><span class="dot"></span>Win-Back Automation for Restaurants</div>
+  <h1 class="hero-title">
+    <span class="t1">Never Lose a</span>
+    <span class="t2">Customer Again.</span>
+  </h1>
+  <p class="hero-sub">Refill automatically tracks your restaurant customers and sends personalised WhatsApp messages to bring them back — without lifting a finger.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start Winning Back →</button>
+    <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">30%</div><div class="stat-lbl">Avg Comeback Rate</div></div>
+    <div class="stat"><div class="stat-num">₦0</div><div class="stat-lbl">Per Message Cost</div></div>
+    <div class="stat"><div class="stat-num">24h</div><div class="stat-lbl">Setup Time</div></div>
+  </div>
+</div>
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(82,183,136,0.1);
-      border: 1px solid rgba(82,183,136,0.3);
-      border-radius: 100px;
-      padding: 8px 20px;
-      font-size: clamp(9px, 1.5vw, 11px);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--green-light);
-      margin-bottom: 36px;
-      animation: fadeUp 0.8s ease both;
-    }
+<div class="divider"></div>
 
-    .dot {
-      width: 6px;
-      height: 6px;
-      background: var(--green-light);
-      border-radius: 50%;
-      animation: blink 2s infinite;
-      flex-shrink: 0;
-    }
+<section class="section how-bg" id="how">
+  <div class="inner">
+    <div class="reveal">
+      <div class="sec-label">How It Works</div>
+      <h2 class="sec-title">Four steps.<br>Fully automatic.</h2>
+    </div>
+    <div class="steps-grid reveal">
+      <div class="step"><div class="step-num">01</div><div class="step-icon">📋</div><div class="step-title">Customer Signs Up</div><div class="step-text">Customers fill a branded form on their first visit — name, phone, food preferences, birthday. Takes 30 seconds.</div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-icon">📍</div><div class="step-title">Every Visit Tracked</div><div class="step-text">Staff logs each visit in seconds using a simple check-in page. Last visit date updates automatically.</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-icon">🧠</div><div class="step-title">Cold Customers Flagged</div><div class="step-text">Every morning Refill scans your list. Anyone not visited in 30 days is flagged automatically.</div></div>
+      <div class="step"><div class="step-num">04</div><div class="step-icon">💬</div><div class="step-title">WhatsApp Sent</div><div class="step-text">A personalised WhatsApp is sent to each cold customer — with their name and favourite food. Zero manual work.</div></div>
+    </div>
+  </div>
+</section>
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+<section class="section" id="features">
+  <div class="inner">
+    <div class="reveal">
+      <div class="sec-label">Features</div>
+      <h2 class="sec-title">Everything your restaurant<br>needs to retain customers.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal"><div class="feat-icon">💬</div><div class="feat-title">Automated WhatsApp</div><div class="feat-text">Win-back messages sent automatically when a customer goes cold. Personalised with their name and favourite order.</div></div>
+      <div class="feat-card gold reveal"><div class="feat-icon">🎂</div><div class="feat-title">Birthday Wishes</div><div class="feat-text">Refill sends a birthday message to every customer on their special day. A small gesture that builds massive loyalty.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">📊</div><div class="feat-title">Customer Dashboard</div><div class="feat-text">See all customers in one place — who's active, cold, messaged, or came back. Full visibility, zero guesswork.</div></div>
+      <div class="feat-card gold reveal"><div class="feat-icon">🍽️</div><div class="feat-title">Food Preference Tracking</div><div class="feat-text">Know what every customer loves to order. Use data to personalise messages and understand popular dishes.</div></div>
+      <div class="feat-card reveal"><div class="feat-icon">⚡</div><div class="feat-title">Daily Automation</div><div class="feat-text">System runs every morning at 8AM — checking birthdays, flagging cold customers, sending messages. Hands-free.</div></div>
+      <div class="feat-card gold reveal"><div class="feat-icon">🏪</div><div class="feat-title">Multi-Restaurant</div><div class="feat-text">Manage multiple locations from one system. Each restaurant gets its own customer database and WhatsApp number.</div></div>
+    </div>
+  </div>
+</section>
 
-    .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(38px, 7vw, 96px);
-      font-weight: 800;
-      line-height: 0.95;
-      letter-spacing: -2px;
-      margin-bottom: 28px;
-      animation: fadeUp 0.8s 0.1s ease both;
-    }
+<div class="divider"></div>
 
-    .t1 {
-      display: block;
-      color: var(--white);
-    }
-
-    .t2 {
-      display: block;
-      background: linear-gradient(135deg, var(--green-light) 0%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      font-size: clamp(13px, 2vw, 17px);
-      color: var(--grey);
-      max-width: 520px;
-      line-height: 1.75;
-      margin-bottom: 44px;
-      font-weight: 300;
-      animation: fadeUp 0.8s 0.2s ease both;
-    }
-
-    .hero-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      justify-content: center;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--green-light), var(--green-mid));
-      color: #000;
-      padding: 16px 36px;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(11px, 1.5vw, 13px);
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 8px 32px rgba(82,183,136,0.2);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 48px rgba(82,183,136,0.35);
-    }
-
-    .btn-secondary {
-      background: none;
-      color: var(--grey);
-      padding: 16px 36px;
-      border: 1px solid #2a2a2a;
-      border-radius: 2px;
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(11px, 1.5vw, 13px);
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .btn-secondary:hover {
-      border-color: #444;
-      color: var(--white);
-    }
-
-    .hero-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(20px, 5vw, 64px);
-      justify-content: center;
-      margin-top: 72px;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-
-    .stat {
-      text-align: center;
-    }
-
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(26px, 4vw, 40px);
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--green-light), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .stat-lbl {
-      font-size: clamp(9px, 1.2vw, 11px);
-      letter-spacing: 2px;
-      color: var(--grey);
-      text-transform: uppercase;
-      margin-top: 6px;
-    }
-
-    @key
+<section class="section">
+  <div class="inner">
+    <div class="flow-grid">
+      <div class="reveal">
+        <div class="sec-label">The Win-Back Flow</div>
+        <h2 class="sec-title">What happens every morning at 8AM.</h2>
+        <p class="sec-sub">While you sleep, Refill is working. Every day, automatically, without fail.</p>
+      </div>
+      <div class="flow-visual reveal">
+        <div class="flow-item"><div class="flow-dot">⏰</div><div class="flow-txt"><strong>8:00 AM — System Wakes Up</strong>Refill runs its daily check automatically</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-item"><div class="flow-dot">🔍</div><div class="flow-txt"><strong>Scans Customer List</strong>Checks last visit date for every customer</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-item"><div class="flow-dot">🎂</div><div class="flow-txt"><strong>Birthday Check</strong>Finds anyone with a birthday today → sends wishes</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-item"><div class="flow-dot">🔴</div><div class="flow-txt"><strong>Cold Customer Alert</strong>Flags anyone not visited in 30+ days</div></div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-item"><div class="flow-dot">💬</div><div class="flow-txt"><strong>WhatsApp Sent</strong>Personalised m
