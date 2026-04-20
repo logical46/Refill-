@@ -4,317 +4,167 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Refill — Never Lose a Customer Again</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+:root{
+  --g:#52B788;--gd:#2D6A4F;--gold:#D4AF37;--gold-l:#F0D060;
+  --d:#080808;--d2:#0d0d0d;--d3:#181818;
+  --w:#fff;--gr:#777;--grl:#bbb;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--d);color:var(--w);font-family:'DM Sans',sans-serif;overflow-x:hidden;width:100%}
 
-:root {
-  --g1: #52B788;
-  --g2: #2D6A4F;
-  --gold: #D4AF37;
-  --gold2: #F0D060;
-  --dark: #080808;
-  --dark2: #101010;
-  --dark3: #181818;
-  --dark4: #222222;
-  --white: #ffffff;
-  --grey: #777777;
-  --grey2: #bbbbbb;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:rgba(8,8,8,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.05)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(16px,2.5vw,22px);letter-spacing:5px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:clamp(16px,3vw,32px);list-style:none}
+.nav-links a{color:var(--gr);text-decoration:none;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--w)}
+.nav-btn{background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;padding:11px 24px;border-radius:2px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(82,183,136,.3)}
 
-body {
-  background: var(--dark);
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  overflow-x: hidden;
-}
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 6% 90px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 65% 55% at 50% -5%,rgba(26,71,42,.55) 0%,transparent 65%),radial-gradient(ellipse 35% 35% at 85% 75%,rgba(212,175,55,.07) 0%,transparent 60%),radial-gradient(ellipse 30% 30% at 15% 80%,rgba(82,183,136,.07) 0%,transparent 60%)}
+.hero>*{position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.3);border-radius:100px;padding:8px 20px;font-size:clamp(9px,1.5vw,11px);letter-spacing:3px;text-transform:uppercase;color:var(--g);margin-bottom:36px;animation:up .8s ease both}
+.badge-dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,7.5vw,100px);font-weight:800;line-height:.93;letter-spacing:-2px;margin-bottom:28px;animation:up .8s .1s ease both}
+.hero h1 span{display:block}
+.grad{background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(13px,1.8vw,17px);color:var(--gr);max-width:520px;line-height:1.8;margin-bottom:44px;font-weight:300;animation:up .8s .2s ease both}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;animation:up .8s .3s ease both}
+.btn-main{background:linear-gradient(135deg,var(--g),var(--gd));color:#000;padding:17px 38px;border:none;border-radius:2px;font-family:'Syne',sans-serif;font-size:clamp(11px,1.4vw,13px);font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;box-shadow:0 8px 32px rgba(82,183,136,.2)}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(82,183,136,.35)}
+.btn-ghost{background:none;color:var(--gr);padding:17px 38px;border:1px solid #2a2a2a;border-radius:2px;font-family:'Syne',sans-serif;font-size:clamp(11px,1.4vw,13px);font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.btn-ghost:hover{border-color:#444;color:var(--w)}
+.hero-stats{display:flex;flex-wrap:wrap;gap:clamp(24px,5vw,64px);justify-content:center;margin-top:72px;animation:up .8s .4s ease both}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:clamp(9px,1.2vw,11px);letter-spacing:2px;color:var(--gr);text-transform:uppercase;margin-top:6px}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── NAV ── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 6%; height: 70px;
-  background: rgba(8,8,8,0.95);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.n-logo {
-  font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 5px;
-  background: linear-gradient(135deg, var(--g1), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.n-links { display: flex; gap: 36px; list-style: none; }
-.n-links a { color: var(--grey); text-decoration: none; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; transition: color .2s; }
-.n-links a:hover { color: var(--white); }
-.n-btn {
-  background: linear-gradient(135deg, var(--g1), var(--g2));
-  color: #000; border: none; padding: 11px 24px; border-radius: 2px;
-  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
-  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all .2s;
-}
-.n-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(82,183,136,.35); }
+/* LAYOUT */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent)}
+.sec{width:100%;padding:clamp(60px,8vw,110px) 6%}
+.sec.dark{background:var(--d2)}
+.inner{max-width:1160px;margin:0 auto;width:100%}
+.sec-tag{font-size:10px;letter-spacing:5px;color:var(--g);text-transform:uppercase;margin-bottom:14px;font-weight:500}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,52px);font-weight:800;line-height:1.05;letter-spacing:-1px;margin-bottom:16px}
+.sec-sub{font-size:clamp(13px,1.5vw,15px);color:var(--gr);line-height:1.8;max-width:460px;font-weight:300}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh; width: 100%;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 120px 6% 80px; position: relative; overflow: hidden;
-}
-.hero-glow {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(26,71,42,.55) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 35% at 85% 75%, rgba(212,175,55,.07) 0%, transparent 55%),
-    radial-gradient(ellipse 35% 30% at 15% 80%, rgba(82,183,136,.07) 0%, transparent 55%);
-}
-.hero > * { position: relative; z-index: 1; }
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:56px;border:1px solid rgba(255,255,255,.04)}
+.step{background:var(--d2);padding:clamp(24px,3vw,44px) clamp(18px,2.5vw,32px);position:relative;transition:background .3s}
+.step:hover{background:rgba(26,71,42,.18)}
+.step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));opacity:0;transition:opacity .3s}
+.step:hover::before{opacity:1}
+.step-n{font-family:'Syne',sans-serif;font-size:clamp(36px,5vw,60px);font-weight:800;color:rgba(255,255,255,.04);line-height:1;margin-bottom:18px}
+.step-i{font-size:clamp(22px,3vw,30px);margin-bottom:12px}
+.step-t{font-family:'Syne',sans-serif;font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:8px}
+.step-p{font-size:clamp(11px,1.2vw,13px);color:var(--gr);line-height:1.7}
 
-.h-badge {
-  display: inline-flex; align-items: center; gap: 9px;
-  border: 1px solid rgba(82,183,136,.35); border-radius: 50px;
-  padding: 8px 22px; margin-bottom: 40px;
-  font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--g1);
-  background: rgba(82,183,136,.08);
-  animation: up .9s ease both;
-}
-.h-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--g1); animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+/* FEATURES */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
+.feat{background:var(--d3);border:1px solid rgba(255,255,255,.05);border-radius:4px;padding:clamp(22px,3vw,36px);transition:all .3s;position:relative;overflow:hidden}
+.feat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);opacity:0;transition:opacity .3s}
+.feat:hover{border-color:rgba(82,183,136,.25);transform:translateY(-3px)}
+.feat:hover::after{opacity:1}
+.feat.gold-card::after{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.feat.gold-card:hover{border-color:rgba(212,175,55,.25)}
+.feat-ic{width:46px;height:46px;border-radius:4px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.feat.gold-card .feat-ic{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.2)}
+.feat-t{font-family:'Syne',sans-serif;font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:10px}
+.feat-p{font-size:clamp(11px,1.2vw,13px);color:var(--gr);line-height:1.7}
 
-.h-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(44px, 8vw, 104px);
-  font-weight: 800; line-height: .92; letter-spacing: -3px; margin-bottom: 30px;
-  animation: up .9s .1s ease both;
-}
-.h-title .line1 { display: block; color: var(--white); }
-.h-title .line2 {
-  display: block;
-  background: linear-gradient(135deg, var(--g1) 0%, var(--gold2) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
+/* FLOW */
+.flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,6vw,80px);align-items:center;margin-top:52px}
+.flow-box{background:var(--d3);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:clamp(22px,3vw,36px);position:relative;overflow:hidden}
+.flow-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold))}
+.flow-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.flow-row:last-child{border-bottom:none}
+.flow-ic{width:34px;height:34px;border-radius:50%;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.flow-txt{font-size:clamp(11px,1.2vw,13px);color:var(--grl);line-height:1.5}
+.flow-txt strong{color:var(--w);display:block;font-size:clamp(10px,1.1vw,12px);margin-bottom:1px}
+.flow-arr{text-align:center;color:var(--g);font-size:16px;opacity:.5;padding:2px 0}
 
-.h-sub {
-  font-size: clamp(15px, 2vw, 19px); color: var(--grey); max-width: 560px;
-  line-height: 1.8; margin-bottom: 50px; font-weight: 300;
-  animation: up .9s .2s ease both;
-}
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:52px}
+.price-card{background:var(--d2);padding:clamp(26px,3vw,46px) clamp(18px,2.5vw,34px);position:relative;transition:background .3s}
+.price-card:hover{background:rgba(26,71,42,.1)}
+.price-card.hot{background:rgba(26,71,42,.22);border-top:2px solid var(--g)}
+.price-pill{display:inline-block;background:var(--g);color:#000;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:4px 12px;margin-bottom:18px;font-family:'Syne',sans-serif}
+.price-plan{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gr);margin-bottom:12px}
+.price-amt{font-family:'Syne',sans-serif;font-size:clamp(28px,3vw,44px);font-weight:800;line-height:1;margin-bottom:4px}
+.price-amt span{font-size:clamp(13px,1.5vw,16px);font-weight:400;color:var(--gr)}
+.price-setup{font-size:12px;color:var(--gr);margin-bottom:26px}
+.price-line{height:1px;background:rgba(255,255,255,.06);margin-bottom:26px}
+.price-list{list-style:none;margin-bottom:32px}
+.price-list li{font-size:clamp(11px,1.2vw,13px);color:var(--grl);padding:8px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.price-list li::before{content:'✓';color:var(--g);font-weight:700;font-size:11px;flex-shrink:0}
+.price-btn{width:100%;padding:14px;border:1px solid rgba(255,255,255,.1);background:none;color:var(--w);font-family:'Syne',sans-serif;font-size:clamp(10px,1.2vw,12px);font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:2px}
+.price-btn:hover{background:rgba(255,255,255,.05)}
+.price-btn.hot-btn{background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;box-shadow:0 8px 24px rgba(82,183,136,.25)}
+.price-btn.hot-btn:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
 
-.h-btns { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; animation: up .9s .3s ease both; }
+/* FOOTER */
+footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.footer-txt{font-size:12px;color:#333;letter-spacing:1px}
 
-.btn-p {
-  background: linear-gradient(135deg, var(--g1), var(--g2));
-  color: #000; border: none; padding: 17px 42px; border-radius: 2px;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-  letter-spacing: 3px; text-transform: uppercase; cursor: pointer;
-  box-shadow: 0 8px 32px rgba(82,183,136,.22); transition: all .3s;
-}
-.btn-p:hover { transform: translateY(-2px); box-shadow: 0 18px 50px rgba(82,183,136,.38); }
+/* MODAL OVERLAY */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--d3);border:1px solid rgba(82,183,136,.2);border-radius:8px;padding:clamp(32px,4vw,52px);width:100%;max-width:480px;position:relative;transform:translateY(30px);transition:transform .3s;box-shadow:0 0 80px rgba(82,183,136,.08)}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:8px 8px 0 0}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--gr);font-size:22px;cursor:pointer;transition:color .2s;line-height:1}
+.modal-close:hover{color:var(--w)}
+.modal-tag{font-size:10px;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:10px;font-weight:500}
+.modal-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.1;margin-bottom:8px}
+.modal-sub{font-size:13px;color:var(--gr);margin-bottom:32px;line-height:1.6}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gr);margin-bottom:8px}
+.field input,.field select{width:100%;background:rgba(255,255,255,.04);border:1px solid #252525;border-radius:4px;padding:14px 16px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:all .3s;appearance:none;-webkit-appearance:none}
+.field input::placeholder{color:#3a3a3a}
+.field input:focus,.field select:focus{border-color:var(--g);background:rgba(82,183,136,.04);box-shadow:0 0 0 1px rgba(82,183,136,.2)}
+.field select option{background:var(--d3);color:var(--w)}
+.modal-submit{width:100%;background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;padding:18px;border-radius:4px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px;box-shadow:0 8px 24px rgba(82,183,136,.2)}
+.modal-submit:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
+.modal-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-.btn-s {
-  background: none; color: var(--grey); padding: 17px 42px;
-  border: 1px solid rgba(255,255,255,.1); border-radius: 2px;
-  font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all .3s;
-}
-.btn-s:hover { border-color: rgba(255,255,255,.3); color: var(--white); }
+/* SUCCESS STATE */
+.modal-success{display:none;text-align:center;padding:20px 0}
+.success-ic{font-size:56px;margin-bottom:20px;animation:pop .5s cubic-bezier(.16,1,.3,1)}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.success-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.success-msg{font-size:14px;color:var(--gr);line-height:1.7}
 
-.h-stats {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: clamp(24px, 6vw, 72px); margin-top: 80px;
-  animation: up .9s .4s ease both;
-}
-.stat .n {
-  font-family: 'Syne', sans-serif; font-size: clamp(30px, 4vw, 44px); font-weight: 800; line-height: 1;
-  background: linear-gradient(135deg, var(--g1), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.stat .l { font-size: 11px; letter-spacing: 2.5px; color: var(--grey); text-transform: uppercase; margin-top: 7px; }
+/* SPINNER */
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spinning .6s linear infinite;vertical-align:middle;margin-left:8px}
+@keyframes spinning{to{transform:rotate(360deg)}}
 
-@keyframes up { from{opacity:0;transform:translateY(36px)} to{opacity:1;transform:translateY(0)} }
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.on{opacity:1;transform:translateY(0)}
 
-/* ── DIVIDER ── */
-.div { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent); }
-
-/* ── WRAPPER ── */
-.wrap { max-width: 1240px; margin: 0 auto; width: 100%; padding: 0 6%; }
-.sec { padding: clamp(72px, 9vw, 120px) 0; }
-
-.sec-label { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--g1); margin-bottom: 14px; font-weight: 500; }
-.sec-title { font-family: 'Syne', sans-serif; font-size: clamp(30px, 4.5vw, 56px); font-weight: 800; line-height: 1.04; letter-spacing: -1px; margin-bottom: 18px; }
-.sec-sub { font-size: clamp(14px, 1.6vw, 16px); color: var(--grey); line-height: 1.85; max-width: 480px; font-weight: 300; }
-
-/* ── HOW IT WORKS ── */
-.how-bg { background: var(--dark2); }
-
-.steps {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1px; background: rgba(255,255,255,.05);
-  margin-top: 64px; border: 1px solid rgba(255,255,255,.05);
-}
-.step {
-  background: var(--dark2); padding: clamp(28px, 3.5vw, 52px) clamp(22px, 3vw, 38px);
-  position: relative; overflow: hidden; transition: background .3s;
-}
-.step:hover { background: rgba(26,71,42,.18); }
-.step::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, var(--g1), var(--gold));
-  opacity:0; transition:opacity .3s;
-}
-.step:hover::before { opacity:1; }
-.step-n { font-family:'Syne',sans-serif; font-size:clamp(40px,6vw,68px); font-weight:800; color:rgba(255,255,255,.04); line-height:1; margin-bottom:20px; }
-.step-i { font-size:clamp(24px,3vw,34px); margin-bottom:14px; }
-.step-t { font-family:'Syne',sans-serif; font-size:clamp(14px,1.6vw,18px); font-weight:700; margin-bottom:10px; color:var(--white); }
-.step-d { font-size:clamp(12px,1.3vw,14px); color:var(--grey); line-height:1.72; }
-
-/* ── FEATURES ── */
-.feats {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 20px; margin-top: 60px;
-}
-.fc {
-  background: var(--dark3); border: 1px solid rgba(255,255,255,.055);
-  border-radius: 5px; padding: clamp(26px, 3vw, 42px);
-  position: relative; overflow: hidden; transition: all .3s;
-}
-.fc::after {
-  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, var(--g1), transparent);
-  opacity:0; transition:opacity .3s;
-}
-.fc:hover { border-color:rgba(82,183,136,.25); transform:translateY(-4px); }
-.fc:hover::after { opacity:1; }
-.fc.gd::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
-.fc.gd:hover { border-color:rgba(212,175,55,.25); }
-.fi {
-  width:50px; height:50px; border-radius:5px;
-  background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.22);
-  display:flex; align-items:center; justify-content:center;
-  font-size:22px; margin-bottom:20px;
-}
-.fc.gd .fi { background:rgba(212,175,55,.1); border-color:rgba(212,175,55,.22); }
-.ft { font-family:'Syne',sans-serif; font-size:clamp(14px,1.6vw,18px); font-weight:700; margin-bottom:10px; }
-.fd { font-size:clamp(12px,1.3vw,14px); color:var(--grey); line-height:1.72; }
-
-/* ── FLOW ── */
-.flow-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: clamp(44px, 7vw, 96px); align-items: center; margin-top: 64px;
-}
-.flow-box {
-  background: var(--dark3); border: 1px solid rgba(255,255,255,.055);
-  border-radius: 8px; padding: clamp(26px, 3.5vw, 44px); position: relative; overflow: hidden;
-}
-.flow-box::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, var(--g1), var(--gold));
-}
-.fl { display:flex; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.045); }
-.fl:last-child { border-bottom:none; }
-.fd2 {
-  width:36px; height:36px; border-radius:50%; flex-shrink:0;
-  background:rgba(82,183,136,.1); border:1px solid rgba(82,183,136,.28);
-  display:flex; align-items:center; justify-content:center; font-size:16px;
-}
-.ft2 { font-size:clamp(12px,1.3vw,14px); color:var(--grey2); line-height:1.5; }
-.ft2 strong { color:var(--white); display:block; font-size:clamp(11px,1.2vw,13px); margin-bottom:2px; font-weight:600; }
-.fa { text-align:center; color:var(--g1); opacity:.45; font-size:18px; padding:3px 0; }
-
-/* ── PRICING ── */
-.pricing-bg { background: var(--dark2); }
-.ph { text-align:center; margin-bottom:60px; }
-.ph .sec-sub { margin:0 auto; }
-
-.pg {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px; background: rgba(255,255,255,.05);
-}
-.pc {
-  background: var(--dark2); padding: clamp(30px, 4vw, 54px) clamp(22px, 3vw, 40px);
-  position: relative; transition: background .3s;
-}
-.pc.hot { background: rgba(26,71,42,.22); border-top: 2px solid var(--g1); }
-.p-badge {
-  display:inline-block; background:var(--g1); color:#000;
-  font-size:10px; letter-spacing:2px; text-transform:uppercase;
-  font-weight:700; padding:5px 14px; margin-bottom:22px;
-  font-family:'Syne',sans-serif;
-}
-.p-plan { font-family:'Syne',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--grey); margin-bottom:14px; }
-.p-price { font-family:'Syne',sans-serif; font-size:clamp(32px,4vw,50px); font-weight:800; line-height:1; margin-bottom:6px; }
-.p-price span { font-size:clamp(14px,1.6vw,18px); font-weight:400; color:var(--grey); }
-.p-setup { font-size:13px; color:var(--grey); margin-bottom:30px; }
-.p-div { height:1px; background:rgba(255,255,255,.07); margin-bottom:28px; }
-.p-list { list-style:none; margin-bottom:36px; }
-.p-list li {
-  font-size:clamp(12px,1.3vw,14px); color:var(--grey2);
-  padding:9px 0; display:flex; align-items:center; gap:10px;
-  border-bottom:1px solid rgba(255,255,255,.04);
-}
-.p-list li::before { content:'✓'; color:var(--g1); font-weight:700; font-size:12px; flex-shrink:0; }
-.p-btn {
-  width:100%; padding:15px; border:1px solid rgba(255,255,255,.12); background:none;
-  color:var(--white); font-family:'Syne',sans-serif; font-size:12px;
-  font-weight:700; letter-spacing:3px; text-transform:uppercase;
-  cursor:pointer; transition:all .3s; border-radius:3px;
-}
-.p-btn:hover { background:rgba(255,255,255,.06); }
-.p-btn.hot-btn {
-  background: linear-gradient(135deg, var(--g1), var(--g2));
-  color:#000; border:none; box-shadow:0 8px 28px rgba(82,183,136,.28);
-}
-.p-btn.hot-btn:hover { transform:translateY(-1px); box-shadow:0 16px 44px rgba(82,183,136,.42); }
-
-/* ── CTA BANNER ── */
-.cta-band {
-  background: linear-gradient(135deg, rgba(26,71,42,.6) 0%, rgba(15,15,15,1) 60%);
-  border-top: 1px solid rgba(82,183,136,.15);
-  border-bottom: 1px solid rgba(82,183,136,.15);
-  padding: clamp(56px, 7vw, 96px) 6%;
-  text-align: center;
-}
-.cta-band h2 {
-  font-family:'Syne',sans-serif; font-size:clamp(28px,4vw,52px);
-  font-weight:800; letter-spacing:-1px; margin-bottom:18px; line-height:1.1;
-}
-.cta-band h2 span {
-  background: linear-gradient(135deg, var(--g1), var(--gold2));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.cta-band p { font-size:clamp(14px,1.6vw,17px); color:var(--grey); margin-bottom:36px; font-weight:300; }
-
-/* ── FOOTER ── */
-footer {
-  padding: clamp(40px,5vw,64px) 6%;
-  border-top: 1px solid rgba(255,255,255,.06);
-  display: flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;
-}
-.f-logo { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; letter-spacing:5px;
-  background:linear-gradient(135deg,var(--g1),var(--gold));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.f-txt { font-size:12px; color:#2e2e2e; letter-spacing:1px; }
-
-/* ── REVEAL ── */
-.rv { opacity:0; transform:translateY(32px); transition:opacity .85s ease, transform .85s ease; }
-.rv.on { opacity:1; transform:translateY(0); }
-
-/* ── RESPONSIVE ── */
+/* RESPONSIVE */
 @media(max-width:960px){
-  .n-links { display:none; }
-  .steps { grid-template-columns:1fr 1fr; }
-  .feats { grid-template-columns:1fr 1fr; }
-  .flow-grid { grid-template-columns:1fr; }
-  .pg { grid-template-columns:1fr; gap:16px; background:transparent; }
-  .pc { border:1px solid rgba(255,255,255,.07); border-radius:5px; }
-  .pc.hot { border-top:2px solid var(--g1); }
+  .nav-links{display:none}
+  .steps{grid-template-columns:1fr 1fr}
+  .feats{grid-template-columns:1fr 1fr}
+  .flow-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr;gap:16px;background:transparent}
+  .price-card{border:1px solid rgba(255,255,255,.06);border-radius:4px}
+  .price-card.hot{border-top:2px solid var(--g)}
 }
-@media(max-width:600px){
-  .steps { grid-template-columns:1fr; }
-  .feats { grid-template-columns:1fr; }
-  .h-stats { gap:28px; }
-  footer { justify-content:center; text-align:center; }
+@media(max-width:580px){
+  .steps{grid-template-columns:1fr}
+  .feats{grid-template-columns:1fr}
+  .hero-stats{gap:24px}
+  footer{justify-content:center;text-align:center}
+  .nav-btn{padding:8px 14px;font-size:10px}
 }
 </style>
 </head>
@@ -322,244 +172,333 @@ footer {
 
 <!-- NAV -->
 <nav>
-  <div class="n-logo">REFILL</div>
-  <ul class="n-links">
+  <div class="logo">REFILL</div>
+  <ul class="nav-links">
     <li><a href="#how">How It Works</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
   </ul>
-  <button class="n-btn" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started</button>
+  <button class="nav-btn" onclick="openModal('nav')">Get Started</button>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
+<div class="hero">
   <div class="hero-glow"></div>
-  <div class="h-badge"><span class="dot"></span> WhatsApp Win-Back Automation for Restaurants</div>
-  <h1 class="h-title">
-    <span class="line1">Never Lose a</span>
-    <span class="line2">Customer Again.</span>
+  <div class="badge"><span class="badge-dot"></span>WhatsApp Win-Back Automation for Restaurants</div>
+  <h1>
+    <span>Never Lose a</span>
+    <span class="grad">Customer Again.</span>
   </h1>
-  <p class="h-sub">Refill automatically tracks your restaurant customers and sends personalised WhatsApp messages to bring them back — every single time, without any manual work.</p>
-  <div class="h-btns">
-    <button class="btn-p" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Start Winning Back →</button>
-    <button class="btn-s" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+  <p class="hero-sub">Refill automatically tracks your restaurant customers and sends personalised WhatsApp messages to bring them back — completely hands-free.</p>
+  <div class="hero-btns">
+    <button class="btn-main" onclick="openModal('hero')">Get Started Today →</button>
+    <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
   </div>
-  <div class="h-stats">
-    <div class="stat"><div class="n">30%</div><div class="l">Avg Comeback Rate</div></div>
-    <div class="stat"><div class="n">₦0</div><div class="l">Per Message Cost</div></div>
-    <div class="stat"><div class="n">24h</div><div class="l">Setup Time</div></div>
-    <div class="stat"><div class="n">8AM</div><div class="l">Daily Auto-Run</div></div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">30%</div><div class="stat-lbl">Avg Comeback Rate</div></div>
+    <div class="stat"><div class="stat-num">₦0</div><div class="stat-lbl">Per Message Cost</div></div>
+    <div class="stat"><div class="stat-num">8AM</div><div class="stat-lbl">Daily Auto-Run</div></div>
+    <div class="stat"><div class="stat-num">24h</div><div class="stat-lbl">Setup Time</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="sec dark" id="how">
+  <div class="inner">
+    <div class="reveal">
+      <div class="sec-tag">How It Works</div>
+      <h2 class="sec-title">Four steps.<br>Fully automatic.</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-i">📋</div>
+        <div class="step-t">Customer Signs Up</div>
+        <div class="step-p">Customers fill your branded form on their first visit — name, phone, food preferences, birthday. 30 seconds.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-i">📍</div>
+        <div class="step-t">Every Visit Tracked</div>
+        <div class="step-p">Staff logs each visit in seconds on a simple check-in page. Last visit date updates automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-i">🧠</div>
+        <div class="step-t">Cold Customers Flagged</div>
+        <div class="step-p">Every morning Refill scans your customer list. Anyone who hasn't visited in 30 days is flagged automatically.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">04</div>
+        <div class="step-i">💬</div>
+        <div class="step-t">WhatsApp Sent</div>
+        <div class="step-p">A personalised WhatsApp is sent to each cold customer — with their name and favourite food. Zero manual work.</div>
+      </div>
+    </div>
   </div>
 </section>
 
-<div class="div"></div>
-
-<!-- HOW IT WORKS -->
-<div class="how-bg" id="how">
-  <div class="wrap">
-    <div class="sec">
-      <div class="rv">
-        <div class="sec-label">How It Works</div>
-        <h2 class="sec-title">Four steps.<br>Fully automatic.</h2>
-      </div>
-      <div class="steps rv">
-        <div class="step">
-          <div class="step-n">01</div>
-          <div class="step-i">📋</div>
-          <div class="step-t">Customer Signs Up</div>
-          <div class="step-d">Customers fill a branded digital form on their first visit — name, WhatsApp number, food preferences, birthday. Takes just 30 seconds.</div>
-        </div>
-        <div class="step">
-          <div class="step-n">02</div>
-          <div class="step-i">📍</div>
-          <div class="step-t">Every Visit Tracked</div>
-          <div class="step-d">Staff logs each customer visit using a simple check-in page. The last visit date updates automatically in the system.</div>
-        </div>
-        <div class="step">
-          <div class="step-n">03</div>
-          <div class="step-i">🧠</div>
-          <div class="step-t">Cold Customers Flagged</div>
-          <div class="step-d">Every morning Refill scans your entire customer list. Anyone who hasn't visited in 30 days is automatically flagged as cold.</div>
-        </div>
-        <div class="step">
-          <div class="step-n">04</div>
-          <div class="step-i">💬</div>
-          <div class="step-t">WhatsApp Sent Automatically</div>
-          <div class="step-d">A personalised WhatsApp message goes out to each cold customer — with their name and their favourite food. Zero manual work.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="div"></div>
-
 <!-- FEATURES -->
-<div id="features">
-  <div class="wrap">
-    <div class="sec">
-      <div class="rv">
-        <div class="sec-label">Features</div>
-        <h2 class="sec-title">Everything your restaurant<br>needs to keep customers coming back.</h2>
+<section class="sec" id="features">
+  <div class="inner">
+    <div class="reveal">
+      <div class="sec-tag">Features</div>
+      <h2 class="sec-title">Everything your restaurant<br>needs to keep customers.</h2>
+    </div>
+    <div class="feats">
+      <div class="feat reveal">
+        <div class="feat-ic">💬</div>
+        <div class="feat-t">Automated WhatsApp</div>
+        <div class="feat-p">Win-back messages sent automatically when a customer goes cold. Personalised with their name and favourite order — no manual work ever.</div>
       </div>
-      <div class="feats">
-        <div class="fc rv">
-          <div class="fi">💬</div>
-          <div class="ft">Automated WhatsApp Win-Back</div>
-          <div class="fd">Win-back messages sent automatically when a customer goes cold. Personalised with their name and favourite order — no copy-pasting, no manual sending ever.</div>
-        </div>
-        <div class="fc gd rv">
-          <div class="fi">🎂</div>
-          <div class="ft">Birthday Wishes</div>
-          <div class="fd">Refill automatically sends a warm birthday message to every customer on their special day. A small gesture that builds massive, lasting loyalty.</div>
-        </div>
-        <div class="fc rv">
-          <div class="fi">📊</div>
-          <div class="ft">Customer Dashboard</div>
-          <div class="fd">See all your customers in one place — who's active, who's gone cold, who was messaged, and who came back. Full visibility, zero guesswork.</div>
-        </div>
-        <div class="fc gd rv">
-          <div class="fi">🍽️</div>
-          <div class="ft">Food Preference Tracking</div>
-          <div class="fd">Know what every single customer loves to order. Use this data to personalise every message and understand which dishes drive the most loyalty.</div>
-        </div>
-        <div class="fc rv">
-          <div class="fi">⚡</div>
-          <div class="ft">Daily 8AM Automation</div>
-          <div class="fd">The system runs every morning at 8AM — checking birthdays, flagging cold customers, firing messages. Completely hands-free, every single day.</div>
-        </div>
-        <div class="fc gd rv">
-          <div class="fi">🏪</div>
-          <div class="ft">Multi-Restaurant Support</div>
-          <div class="fd">Manage multiple restaurant locations from one Refill system. Each restaurant gets its own customer database, dashboard, and WhatsApp number.</div>
-        </div>
+      <div class="feat gold-card reveal">
+        <div class="feat-ic">🎂</div>
+        <div class="feat-t">Birthday Wishes</div>
+        <div class="feat-p">Refill sends a birthday message to every customer on their special day automatically. A small gesture that builds massive loyalty.</div>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-ic">📊</div>
+        <div class="feat-t">Customer Dashboard</div>
+        <div class="feat-p">See all your customers — who's active, who's cold, who was messaged, who came back. Full visibility, zero guesswork.</div>
+      </div>
+      <div class="feat gold-card reveal">
+        <div class="feat-ic">🍽️</div>
+        <div class="feat-t">Food Preference Tracking</div>
+        <div class="feat-p">Know what every customer loves to order. Messages are personalised with their favourite food to maximise comeback rate.</div>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-ic">⚡</div>
+        <div class="feat-t">Daily Automation</div>
+        <div class="feat-p">System runs every morning at 8AM — checking birthdays, flagging cold customers, sending messages. Completely hands-free.</div>
+      </div>
+      <div class="feat gold-card reveal">
+        <div class="feat-ic">🏪</div>
+        <div class="feat-t">Multi-Location Support</div>
+        <div class="feat-p">Manage multiple restaurant locations from one system. Each location gets its own customer database and WhatsApp number.</div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<div class="div"></div>
+<div class="divider"></div>
 
-<!-- FLOW -->
-<div>
-  <div class="wrap">
-    <div class="sec">
-      <div class="flow-grid">
-        <div class="rv">
-          <div class="sec-label">The Win-Back Flow</div>
-          <h2 class="sec-title">What happens every morning at 8AM.</h2>
-          <p class="sec-sub">While your restaurant sleeps, Refill is working. Every single day, automatically, without fail — bringing lost customers back to your tables.</p>
-        </div>
-        <div class="flow-box rv">
-          <div class="fl"><div class="fd2">⏰</div><div class="ft2"><strong>8:00 AM — System Activates</strong>Refill's daily engine starts automatically</div></div>
-          <div class="fa">↓</div>
-          <div class="fl"><div class="fd2">🔍</div><div class="ft2"><strong>Scans Every Customer</strong>Checks the last visit date for each person in the database</div></div>
-          <div class="fa">↓</div>
-          <div class="fl"><div class="fd2">🎂</div><div class="ft2"><strong>Birthday Check</strong>Finds anyone celebrating today → birthday message sent instantly</div></div>
-          <div class="fa">↓</div>
-          <div class="fl"><div class="fd2">🔴</div><div class="ft2"><strong>Cold Customer Alert</strong>Anyone not visited in 30+ days is flagged and queued</div></div>
-          <div class="fa">↓</div>
-          <div class="fl"><div class="fd2">💬</div><div class="ft2"><strong>WhatsApp Messages Fired</strong>Each cold customer receives a personalised win-back message</div></div>
-        </div>
+<!-- FLOW SECTION -->
+<section class="sec">
+  <div class="inner">
+    <div class="flow-grid">
+      <div class="reveal">
+        <div class="sec-tag">The Win-Back Flow</div>
+        <h2 class="sec-title">What happens every morning at 8AM.</h2>
+        <p class="sec-sub" style="margin-bottom:32px">While you sleep, Refill is working. Every single day, automatically, without fail.</p>
+        <button class="btn-main" onclick="openModal('flow')">Start Winning Back Customers →</button>
+      </div>
+      <div class="flow-box reveal">
+        <div class="flow-row"><div class="flow-ic">⏰</div><div class="flow-txt"><strong>8:00 AM — System Wakes Up</strong>Refill runs its daily check automatically</div></div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-row"><div class="flow-ic">🔍</div><div class="flow-txt"><strong>Scans Customer List</strong>Checks last visit date for every customer</div></div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-row"><div class="flow-ic">🎂</div><div class="flow-txt"><strong>Birthday Check</strong>Finds anyone with a birthday today → sends wishes</div></div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-row"><div class="flow-ic">🔴</div><div class="flow-txt"><strong>Cold Customer Alert</strong>Flags anyone not visited in 30+ days</div></div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-row"><div class="flow-ic">💬</div><div class="flow-txt"><strong>WhatsApp Sent Automatically</strong>Personalised message fired to each cold customer</div></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- PRICING -->
-<div class="pricing-bg" id="pricing">
-  <div class="wrap">
-    <div class="sec">
-      <div class="ph rv">
-        <div class="sec-label">Pricing</div>
-        <h2 class="sec-title">Simple, honest pricing.</h2>
-        <p class="sec-sub">One setup fee. One monthly fee. No hidden costs. No per-message charges. No surprises.</p>
+<section class="sec dark" id="pricing">
+  <div class="inner">
+    <div style="text-align:center;margin-bottom:52px" class="reveal">
+      <div class="sec-tag">Pricing</div>
+      <h2 class="sec-title">Simple, honest pricing.</h2>
+      <p class="sec-sub" style="margin:0 auto">One setup fee. One monthly fee. No hidden costs. No per-message charges.</p>
+    </div>
+    <div class="pricing-grid reveal">
+      <!-- STARTER -->
+      <div class="price-card">
+        <div class="price-plan">Starter</div>
+        <div class="price-amt">₦80,000<span>/mo</span></div>
+        <div class="price-setup">+ ₦100,000 one-time setup fee</div>
+        <div class="price-line"></div>
+        <ul class="price-list">
+          <li>Up to 500 customers</li>
+          <li>Automated win-back messages</li>
+          <li>Birthday messages</li>
+          <li>Customer dashboard</li>
+          <li>Staff check-in page</li>
+          <li>Email support</li>
+        </ul>
+        <button class="price-btn" onclick="openModal('starter')">Get Started →</button>
       </div>
-      <div class="pg rv">
-
-        <!-- STARTER -->
-        <div class="pc">
-          <div class="p-plan">Starter</div>
-          <div class="p-price">₦80,000<span>/mo</span></div>
-          <div class="p-setup">+ ₦100,000 one-time setup fee</div>
-          <div class="p-div"></div>
-          <ul class="p-list">
-            <li>Up to 500 customers</li>
-            <li>Automated WhatsApp win-back</li>
-            <li>Birthday messages</li>
-            <li>Customer dashboard</li>
-            <li>Visit check-in page</li>
-            <li>Email support</li>
-          </ul>
-          <button class="p-btn" onclick="window.location.href='mailto:hello@refill.ng?subject=Starter Plan Enquiry'">Get Started →</button>
-        </div>
-
-        <!-- GROWTH -->
-        <div class="pc hot">
-          <div class="p-badge">Most Popular</div>
-          <div class="p-plan">Growth</div>
-          <div class="p-price">₦150,000<span>/mo</span></div>
-          <div class="p-setup">+ ₦150,000 one-time setup fee</div>
-          <div class="p-div"></div>
-          <ul class="p-list">
-            <li>Up to 2,000 customers</li>
-            <li>Automated WhatsApp win-back</li>
-            <li>Birthday messages</li>
-            <li>Customer dashboard</li>
-            <li>Visit check-in page</li>
-            <li>Food preference analytics</li>
-            <li>Priority support</li>
-          </ul>
-          <button class="p-btn hot-btn" onclick="window.location.href='mailto:hello@refill.ng?subject=Growth Plan Enquiry'">Get Started →</button>
-        </div>
-
-        <!-- PRO -->
-        <div class="pc">
-          <div class="p-plan">Pro</div>
-          <div class="p-price">₦300,000<span>/mo</span></div>
-          <div class="p-setup">+ ₦250,000 one-time setup fee</div>
-          <div class="p-div"></div>
-          <ul class="p-list">
-            <li>Unlimited customers</li>
-            <li>Automated WhatsApp win-back</li>
-            <li>Birthday messages</li>
-            <li>Full analytics dashboard</li>
-            <li>Visit check-in page</li>
-            <li>Multi-location support</li>
-            <li>Custom message templates</li>
-            <li>Dedicated account manager</li>
-          </ul>
-          <button class="p-btn" onclick="window.location.href='mailto:hello@refill.ng?subject=Pro Plan Enquiry'">Get Started →</button>
-        </div>
-
+      <!-- GROWTH -->
+      <div class="price-card hot">
+        <div class="price-pill">Most Popular</div>
+        <div class="price-plan">Growth</div>
+        <div class="price-amt">₦150,000<span>/mo</span></div>
+        <div class="price-setup">+ ₦150,000 one-time setup fee</div>
+        <div class="price-line"></div>
+        <ul class="price-list">
+          <li>Up to 2,000 customers</li>
+          <li>Automated win-back messages</li>
+          <li>Birthday messages</li>
+          <li>Customer dashboard</li>
+          <li>Food preference analytics</li>
+          <li>Staff check-in page</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="price-btn hot-btn" onclick="openModal('growth')">Get Started →</button>
+      </div>
+      <!-- PRO -->
+      <div class="price-card">
+        <div class="price-plan">Pro</div>
+        <div class="price-amt">₦300,000<span>/mo</span></div>
+        <div class="price-setup">+ ₦250,000 one-time setup fee</div>
+        <div class="price-line"></div>
+        <ul class="price-list">
+          <li>Unlimited customers</li>
+          <li>Automated win-back messages</li>
+          <li>Birthday messages</li>
+          <li>Full analytics dashboard</li>
+          <li>Multi-location support</li>
+          <li>Staff check-in page</li>
+          <li>Dedicated support</li>
+        </ul>
+        <button class="price-btn" onclick="openModal('pro')">Get Started →</button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- CTA BAND -->
-<div class="cta-band">
-  <h2>Ready to stop <span>losing customers?</span></h2>
-  <p>Join the restaurants already using Refill to win back lost customers automatically.</p>
-  <button class="btn-p" onclick="window.location.href='mailto:hello@refill.ng?subject=Refill Enquiry'">Book a Free Demo →</button>
-</div>
+</section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="f-logo">REFILL</div>
-  <div class="f-txt">© 2026 Refill. Never lose a customer again.</div>
-  <div class="f-txt">Built for Nigerian restaurants 🇳🇬</div>
+  <div class="footer-logo">REFILL</div>
+  <div class="footer-txt">© 2026 Refill. Never lose a customer again.</div>
+  <div class="footer-txt">Built for Nigerian restaurants.</div>
 </footer>
 
-<script>
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); } });
-  }, { threshold: 0.07 });
+<!-- LEAD CAPTURE MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
 
-  document.querySelectorAll('.rv').forEach((el, i) => {
-    el.style.transitionDelay = (i % 5 * 0.08) + 's';
-    obs.observe(el);
+    <!-- FORM STATE -->
+    <div id="modal-form">
+      <div class="modal-tag">Get Started with Refill</div>
+      <h3 class="modal-title">Let's get your restaurant set up.</h3>
+      <p class="modal-sub">Fill in your details — we'll contact you on WhatsApp within 24 hours.</p>
+
+      <div class="field">
+        <label>Your Name</label>
+        <input type="text" id="lead-name" placeholder="e.g. Chidi Okafor">
+      </div>
+      <div class="field">
+        <label>Restaurant Name</label>
+        <input type="text" id="lead-restaurant" placeholder="e.g. Brandas Food">
+      </div>
+      <div class="field">
+        <label>WhatsApp Number</label>
+        <input type="tel" id="lead-phone" placeholder="e.g. 08012345678">
+      </div>
+      <div class="field">
+        <label>Plan Interested In</label>
+        <select id="lead-plan">
+          <option value="" disabled selected>Select a plan</option>
+          <option value="Starter">Starter — ₦80,000/mo</option>
+          <option value="Growth">Growth — ₦150,000/mo</option>
+          <option value="Pro">Pro — ₦300,000/mo</option>
+          <option value="Not sure">Not sure yet</option>
+        </select>
+      </div>
+      <p id="lead-error" style="color:#ff4444;font-size:12px;margin-bottom:12px;display:none">Please fill in all fields</p>
+      <button class="modal-submit" id="modal-submit-btn" onclick="submitLead()">Contact Me on WhatsApp →</button>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="modal-success" id="modal-success">
+      <div class="success-ic">🎉</div>
+      <div class="success-title">We Got You!</div>
+      <p class="success-msg">Thanks <strong id="success-name" style="color:var(--g)"></strong>!<br><br>We'll contact you on WhatsApp within 24 hours to get <strong id="success-restaurant" style="color:var(--w)"></strong> set up on Refill.<br><br>Get ready to never lose a customer again. 💪</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── MODAL ──
+let selectedPlan = '';
+
+function openModal(source) {
+  const planMap = { starter:'Starter', growth:'Growth', pro:'Pro' };
+  if (planMap[source]) {
+    selectedPlan = planMap[source];
+    document.getElementById('lead-plan').value = planMap[source];
+  }
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── LEAD SUBMIT ──
+const LEADS_SHEET = 'https://script.google.com/macros/s/AKfycbwoVm_A8eom2PlFSgNy1G6lezGS8Gaxy4uf3mfnI31AlNkbi0Y0NSXhC16zXnXMRvhz/exec';
+
+function submitLead() {
+  const name       = document.getElementById('lead-name').value.trim();
+  const restaurant = document.getElementById('lead-restaurant').value.trim();
+  const phone      = document.getElementById('lead-phone').value.trim();
+  const plan       = document.getElementById('lead-plan').value;
+
+  if (!name || !restaurant || !phone || !plan) {
+    document.getElementById('lead-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('lead-error').style.display = 'none';
+
+  const btn = document.getElementById('modal-submit-btn');
+  btn.innerHTML = 'Sending... <span class="spin"></span>';
+  btn.disabled = true;
+
+  const payload = {
+    type: 'lead',
+    name, restaurant, phone, plan,
+    date: new Date().toISOString()
+  };
+
+  fetch(LEADS_SHEET, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .finally(() => {
+    document.getElementById('success-name').textContent = name;
+    document.getElementById('success-restaurant').textContent = restaurant;
+    document.getElementById('modal-form').style.display = 'none';
+    document.getElementById('modal-success').style.display = 'block';
   });
+}
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i % 4 * 0.1) + 's';
+  obs.observe(el);
+});
 </script>
 </body>
 </html>
