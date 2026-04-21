@@ -29,7 +29,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 65% 55% at 50% -5%,rgba(26,71,42,.55) 0%,transparent 65%),radial-gradient(ellipse 35% 35% at 85% 75%,rgba(212,175,55,.07) 0%,transparent 60%),radial-gradient(ellipse 30% 30% at 15% 80%,rgba(82,183,136,.07) 0%,transparent 60%)}
 .hero>*{position:relative;z-index:1}
 .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.3);border-radius:100px;padding:8px 20px;font-size:clamp(9px,1.5vw,11px);letter-spacing:3px;text-transform:uppercase;color:var(--g);margin-bottom:36px;animation:up .8s ease both}
-.badge-dot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
+.bdot{width:6px;height:6px;background:var(--g);border-radius:50%;animation:blink 2s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,7.5vw,100px);font-weight:800;line-height:.93;letter-spacing:-2px;margin-bottom:28px;animation:up .8s .1s ease both}
 .hero h1 span{display:block}
@@ -71,10 +71,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .feat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--g),transparent);opacity:0;transition:opacity .3s}
 .feat:hover{border-color:rgba(82,183,136,.25);transform:translateY(-3px)}
 .feat:hover::after{opacity:1}
-.feat.gold-card::after{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-.feat.gold-card:hover{border-color:rgba(212,175,55,.25)}
+.feat.gc::after{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.feat.gc:hover{border-color:rgba(212,175,55,.25)}
 .feat-ic{width:46px;height:46px;border-radius:4px;background:rgba(82,183,136,.1);border:1px solid rgba(82,183,136,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
-.feat.gold-card .feat-ic{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.2)}
+.feat.gc .feat-ic{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.2)}
 .feat-t{font-family:'Syne',sans-serif;font-size:clamp(13px,1.5vw,17px);font-weight:700;margin-bottom:10px}
 .feat-p{font-size:clamp(11px,1.2vw,13px);color:var(--gr);line-height:1.7}
 
@@ -90,56 +90,60 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:cen
 .flow-arr{text-align:center;color:var(--g);font-size:16px;opacity:.5;padding:2px 0}
 
 /* PRICING */
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);margin-top:52px}
-.price-card{background:var(--d2);padding:clamp(26px,3vw,46px) clamp(18px,2.5vw,34px);position:relative;transition:background .3s}
-.price-card:hover{background:rgba(26,71,42,.1)}
-.price-card.hot{background:rgba(26,71,42,.22);border-top:2px solid var(--g)}
-.price-pill{display:inline-block;background:var(--g);color:#000;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:4px 12px;margin-bottom:18px;font-family:'Syne',sans-serif}
-.price-plan{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gr);margin-bottom:12px}
-.price-amt{font-family:'Syne',sans-serif;font-size:clamp(28px,3vw,44px);font-weight:800;line-height:1;margin-bottom:4px}
-.price-amt span{font-size:clamp(13px,1.5vw,16px);font-weight:400;color:var(--gr)}
-.price-setup{font-size:12px;color:var(--gr);margin-bottom:26px}
-.price-line{height:1px;background:rgba(255,255,255,.06);margin-bottom:26px}
-.price-list{list-style:none;margin-bottom:32px}
-.price-list li{font-size:clamp(11px,1.2vw,13px);color:var(--grl);padding:8px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.03)}
-.price-list li::before{content:'✓';color:var(--g);font-weight:700;font-size:11px;flex-shrink:0}
-.price-btn{width:100%;padding:14px;border:1px solid rgba(255,255,255,.1);background:none;color:var(--w);font-family:'Syne',sans-serif;font-size:clamp(10px,1.2vw,12px);font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:2px}
-.price-btn:hover{background:rgba(255,255,255,.05)}
-.price-btn.hot-btn{background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;box-shadow:0 8px 24px rgba(82,183,136,.25)}
-.price-btn.hot-btn:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
+.pricing-hdr{text-align:center;margin-bottom:52px}
+.pricing-hdr .sec-sub{margin:0 auto}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04)}
+.pc{background:var(--d2);padding:clamp(26px,3vw,46px) clamp(18px,2.5vw,34px);position:relative;transition:background .3s}
+.pc:hover{background:rgba(26,71,42,.1)}
+.pc.hot{background:rgba(26,71,42,.22);border-top:2px solid var(--g)}
+.pc-pill{display:inline-block;background:var(--g);color:#000;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:4px 12px;margin-bottom:18px;font-family:'Syne',sans-serif}
+.pc-plan{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gr);margin-bottom:12px}
+.pc-amt{font-family:'Syne',sans-serif;font-size:clamp(28px,3vw,44px);font-weight:800;line-height:1;margin-bottom:4px}
+.pc-amt span{font-size:clamp(13px,1.5vw,16px);font-weight:400;color:var(--gr)}
+.pc-setup{font-size:12px;color:var(--gr);margin-bottom:26px}
+.pc-line{height:1px;background:rgba(255,255,255,.06);margin-bottom:26px}
+.pc-list{list-style:none;margin-bottom:32px}
+.pc-list li{font-size:clamp(11px,1.2vw,13px);color:var(--grl);padding:8px 0;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.03)}
+.pc-list li::before{content:'✓';color:var(--g);font-weight:700;font-size:11px;flex-shrink:0}
+.pc-btn{width:100%;padding:14px;border:1px solid rgba(255,255,255,.1);background:none;color:var(--w);font-family:'Syne',sans-serif;font-size:clamp(10px,1.2vw,12px);font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;border-radius:2px}
+.pc-btn:hover{background:rgba(255,255,255,.05)}
+.pc-btn.hb{background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;box-shadow:0 8px 24px rgba(82,183,136,.25)}
+.pc-btn.hb:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
 
 /* FOOTER */
 footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
 .footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .footer-txt{font-size:12px;color:#333;letter-spacing:1px}
 
-/* MODAL OVERLAY */
-.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--d3);border:1px solid rgba(82,183,136,.2);border-radius:8px;padding:clamp(32px,4vw,52px);width:100%;max-width:480px;position:relative;transform:translateY(30px);transition:transform .3s;box-shadow:0 0 80px rgba(82,183,136,.08)}
-.modal-overlay.open .modal{transform:translateY(0)}
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--d3);border:1px solid rgba(82,183,136,.2);border-radius:8px;padding:clamp(28px,4vw,48px);width:100%;max-width:460px;position:relative;transform:translateY(30px);transition:transform .3s;box-shadow:0 0 80px rgba(82,183,136,.08);max-height:90vh;overflow-y:auto}
+.overlay.open .modal{transform:translateY(0)}
 .modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:8px 8px 0 0}
-.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--gr);font-size:22px;cursor:pointer;transition:color .2s;line-height:1}
-.modal-close:hover{color:var(--w)}
-.modal-tag{font-size:10px;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:10px;font-weight:500}
-.modal-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.1;margin-bottom:8px}
-.modal-sub{font-size:13px;color:var(--gr);margin-bottom:32px;line-height:1.6}
-.field{margin-bottom:18px}
-.field label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gr);margin-bottom:8px}
-.field input,.field select{width:100%;background:rgba(255,255,255,.04);border:1px solid #252525;border-radius:4px;padding:14px 16px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:all .3s;appearance:none;-webkit-appearance:none}
+.m-close{position:absolute;top:14px;right:18px;background:none;border:none;color:var(--gr);font-size:24px;cursor:pointer;line-height:1;transition:color .2s}
+.m-close:hover{color:var(--w)}
+.m-tag{font-size:10px;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:10px;font-weight:500}
+.m-title{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:800;line-height:1.1;margin-bottom:8px}
+.m-sub{font-size:13px;color:var(--gr);margin-bottom:28px;line-height:1.6}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gr);margin-bottom:7px}
+.field input,.field select{width:100%;background:rgba(255,255,255,.04);border:1px solid #252525;border-radius:4px;padding:14px 16px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:all .3s}
 .field input::placeholder{color:#3a3a3a}
 .field input:focus,.field select:focus{border-color:var(--g);background:rgba(82,183,136,.04);box-shadow:0 0 0 1px rgba(82,183,136,.2)}
+.field select{appearance:none;-webkit-appearance:none}
 .field select option{background:var(--d3);color:var(--w)}
-.modal-submit{width:100%;background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;padding:18px;border-radius:4px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px;box-shadow:0 8px 24px rgba(82,183,136,.2)}
-.modal-submit:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
-.modal-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.m-err{color:#ff4444;font-size:12px;margin-bottom:12px;display:none}
+.m-submit{width:100%;background:linear-gradient(135deg,var(--g),var(--gd));color:#000;border:none;padding:17px;border-radius:4px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:4px;box-shadow:0 8px 24px rgba(82,183,136,.2)}
+.m-submit:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(82,183,136,.35)}
+.m-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
 
-/* SUCCESS STATE */
-.modal-success{display:none;text-align:center;padding:20px 0}
-.success-ic{font-size:56px;margin-bottom:20px;animation:pop .5s cubic-bezier(.16,1,.3,1)}
+/* SUCCESS */
+.m-success{display:none;text-align:center;padding:16px 0}
+.s-ic{font-size:56px;margin-bottom:16px;animation:pop .5s cubic-bezier(.16,1,.3,1)}
 @keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
-.success-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.success-msg{font-size:14px;color:var(--gr);line-height:1.7}
+.s-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-msg{font-size:14px;color:var(--gr);line-height:1.8}
 
 /* SPINNER */
 .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spinning .6s linear infinite;vertical-align:middle;margin-left:8px}
@@ -156,8 +160,8 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
   .feats{grid-template-columns:1fr 1fr}
   .flow-grid{grid-template-columns:1fr}
   .pricing-grid{grid-template-columns:1fr;gap:16px;background:transparent}
-  .price-card{border:1px solid rgba(255,255,255,.06);border-radius:4px}
-  .price-card.hot{border-top:2px solid var(--g)}
+  .pc{border:1px solid rgba(255,255,255,.06);border-radius:4px}
+  .pc.hot{border-top:2px solid var(--g)}
 }
 @media(max-width:580px){
   .steps{grid-template-columns:1fr}
@@ -178,20 +182,20 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
     <li><a href="#features">Features</a></li>
     <li><a href="#pricing">Pricing</a></li>
   </ul>
-  <button class="nav-btn" onclick="openModal('nav')">Get Started</button>
+  <button class="nav-btn" onclick="openModal()">Get Started</button>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-glow"></div>
-  <div class="badge"><span class="badge-dot"></span>WhatsApp Win-Back Automation for Restaurants</div>
+  <div class="badge"><span class="bdot"></span>WhatsApp Win-Back Automation for Restaurants</div>
   <h1>
     <span>Never Lose a</span>
     <span class="grad">Customer Again.</span>
   </h1>
   <p class="hero-sub">Refill automatically tracks your restaurant customers and sends personalised WhatsApp messages to bring them back — completely hands-free.</p>
   <div class="hero-btns">
-    <button class="btn-main" onclick="openModal('hero')">Get Started Today →</button>
+    <button class="btn-main" onclick="openModal()">Get Started Today →</button>
     <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
   </div>
   <div class="hero-stats">
@@ -212,30 +216,10 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
       <h2 class="sec-title">Four steps.<br>Fully automatic.</h2>
     </div>
     <div class="steps reveal">
-      <div class="step">
-        <div class="step-n">01</div>
-        <div class="step-i">📋</div>
-        <div class="step-t">Customer Signs Up</div>
-        <div class="step-p">Customers fill your branded form on their first visit — name, phone, food preferences, birthday. 30 seconds.</div>
-      </div>
-      <div class="step">
-        <div class="step-n">02</div>
-        <div class="step-i">📍</div>
-        <div class="step-t">Every Visit Tracked</div>
-        <div class="step-p">Staff logs each visit in seconds on a simple check-in page. Last visit date updates automatically.</div>
-      </div>
-      <div class="step">
-        <div class="step-n">03</div>
-        <div class="step-i">🧠</div>
-        <div class="step-t">Cold Customers Flagged</div>
-        <div class="step-p">Every morning Refill scans your customer list. Anyone who hasn't visited in 30 days is flagged automatically.</div>
-      </div>
-      <div class="step">
-        <div class="step-n">04</div>
-        <div class="step-i">💬</div>
-        <div class="step-t">WhatsApp Sent</div>
-        <div class="step-p">A personalised WhatsApp is sent to each cold customer — with their name and favourite food. Zero manual work.</div>
-      </div>
+      <div class="step"><div class="step-n">01</div><div class="step-i">📋</div><div class="step-t">Customer Signs Up</div><div class="step-p">Customers fill your branded form on their first visit — name, phone, food preferences, birthday. 30 seconds.</div></div>
+      <div class="step"><div class="step-n">02</div><div class="step-i">📍</div><div class="step-t">Every Visit Tracked</div><div class="step-p">Staff logs each visit in seconds on a simple check-in page. Last visit date updates automatically.</div></div>
+      <div class="step"><div class="step-n">03</div><div class="step-i">🧠</div><div class="step-t">Cold Customers Flagged</div><div class="step-p">Every morning Refill scans your list. Anyone who hasn't visited in 30 days is flagged automatically.</div></div>
+      <div class="step"><div class="step-n">04</div><div class="step-i">💬</div><div class="step-t">WhatsApp Sent</div><div class="step-p">A personalised WhatsApp is sent to each cold customer — with their name and favourite food. Zero manual work.</div></div>
     </div>
   </div>
 </section>
@@ -248,43 +232,19 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
       <h2 class="sec-title">Everything your restaurant<br>needs to keep customers.</h2>
     </div>
     <div class="feats">
-      <div class="feat reveal">
-        <div class="feat-ic">💬</div>
-        <div class="feat-t">Automated WhatsApp</div>
-        <div class="feat-p">Win-back messages sent automatically when a customer goes cold. Personalised with their name and favourite order — no manual work ever.</div>
-      </div>
-      <div class="feat gold-card reveal">
-        <div class="feat-ic">🎂</div>
-        <div class="feat-t">Birthday Wishes</div>
-        <div class="feat-p">Refill sends a birthday message to every customer on their special day automatically. A small gesture that builds massive loyalty.</div>
-      </div>
-      <div class="feat reveal">
-        <div class="feat-ic">📊</div>
-        <div class="feat-t">Customer Dashboard</div>
-        <div class="feat-p">See all your customers — who's active, who's cold, who was messaged, who came back. Full visibility, zero guesswork.</div>
-      </div>
-      <div class="feat gold-card reveal">
-        <div class="feat-ic">🍽️</div>
-        <div class="feat-t">Food Preference Tracking</div>
-        <div class="feat-p">Know what every customer loves to order. Messages are personalised with their favourite food to maximise comeback rate.</div>
-      </div>
-      <div class="feat reveal">
-        <div class="feat-ic">⚡</div>
-        <div class="feat-t">Daily Automation</div>
-        <div class="feat-p">System runs every morning at 8AM — checking birthdays, flagging cold customers, sending messages. Completely hands-free.</div>
-      </div>
-      <div class="feat gold-card reveal">
-        <div class="feat-ic">🏪</div>
-        <div class="feat-t">Multi-Location Support</div>
-        <div class="feat-p">Manage multiple restaurant locations from one system. Each location gets its own customer database and WhatsApp number.</div>
-      </div>
+      <div class="feat reveal"><div class="feat-ic">💬</div><div class="feat-t">Automated WhatsApp</div><div class="feat-p">Win-back messages sent automatically when a customer goes cold. Personalised with their name and favourite order — no manual work ever.</div></div>
+      <div class="feat gc reveal"><div class="feat-ic">🎂</div><div class="feat-t">Birthday Wishes</div><div class="feat-p">Refill sends a birthday message to every customer on their special day automatically. A small gesture that builds massive loyalty.</div></div>
+      <div class="feat reveal"><div class="feat-ic">📊</div><div class="feat-t">Customer Dashboard</div><div class="feat-p">See all your customers — who's active, who's cold, who was messaged, who came back. Full visibility, zero guesswork.</div></div>
+      <div class="feat gc reveal"><div class="feat-ic">🍽️</div><div class="feat-t">Food Preference Tracking</div><div class="feat-p">Know what every customer loves to order. Messages are personalised with their favourite food to maximise comeback rate.</div></div>
+      <div class="feat reveal"><div class="feat-ic">⚡</div><div class="feat-t">Daily Automation</div><div class="feat-p">System runs every morning at 8AM — checking birthdays, flagging cold customers, sending messages. Completely hands-free.</div></div>
+      <div class="feat gc reveal"><div class="feat-ic">🏪</div><div class="feat-t">Multi-Location Support</div><div class="feat-p">Manage multiple restaurant locations from one system. Each location gets its own customer database and WhatsApp number.</div></div>
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- FLOW SECTION -->
+<!-- FLOW -->
 <section class="sec">
   <div class="inner">
     <div class="flow-grid">
@@ -292,7 +252,7 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
         <div class="sec-tag">The Win-Back Flow</div>
         <h2 class="sec-title">What happens every morning at 8AM.</h2>
         <p class="sec-sub" style="margin-bottom:32px">While you sleep, Refill is working. Every single day, automatically, without fail.</p>
-        <button class="btn-main" onclick="openModal('flow')">Start Winning Back Customers →</button>
+        <button class="btn-main" onclick="openModal()">Start Winning Back Customers →</button>
       </div>
       <div class="flow-box reveal">
         <div class="flow-row"><div class="flow-ic">⏰</div><div class="flow-txt"><strong>8:00 AM — System Wakes Up</strong>Refill runs its daily check automatically</div></div>
@@ -312,19 +272,18 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
 <!-- PRICING -->
 <section class="sec dark" id="pricing">
   <div class="inner">
-    <div style="text-align:center;margin-bottom:52px" class="reveal">
+    <div class="pricing-hdr reveal">
       <div class="sec-tag">Pricing</div>
       <h2 class="sec-title">Simple, honest pricing.</h2>
-      <p class="sec-sub" style="margin:0 auto">One setup fee. One monthly fee. No hidden costs. No per-message charges.</p>
+      <p class="sec-sub">One setup fee. One monthly fee. No hidden costs. No per-message charges.</p>
     </div>
     <div class="pricing-grid reveal">
-      <!-- STARTER -->
-      <div class="price-card">
-        <div class="price-plan">Starter</div>
-        <div class="price-amt">₦80,000<span>/mo</span></div>
-        <div class="price-setup">+ ₦100,000 one-time setup fee</div>
-        <div class="price-line"></div>
-        <ul class="price-list">
+      <div class="pc">
+        <div class="pc-plan">Starter</div>
+        <div class="pc-amt">₦80,000<span>/mo</span></div>
+        <div class="pc-setup">+ ₦100,000 one-time setup fee</div>
+        <div class="pc-line"></div>
+        <ul class="pc-list">
           <li>Up to 500 customers</li>
           <li>Automated win-back messages</li>
           <li>Birthday messages</li>
@@ -332,16 +291,15 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
           <li>Staff check-in page</li>
           <li>Email support</li>
         </ul>
-        <button class="price-btn" onclick="openModal('starter')">Get Started →</button>
+        <button class="pc-btn" onclick="openModal('Starter')">Get Started →</button>
       </div>
-      <!-- GROWTH -->
-      <div class="price-card hot">
-        <div class="price-pill">Most Popular</div>
-        <div class="price-plan">Growth</div>
-        <div class="price-amt">₦150,000<span>/mo</span></div>
-        <div class="price-setup">+ ₦150,000 one-time setup fee</div>
-        <div class="price-line"></div>
-        <ul class="price-list">
+      <div class="pc hot">
+        <div class="pc-pill">Most Popular</div>
+        <div class="pc-plan">Growth</div>
+        <div class="pc-amt">₦150,000<span>/mo</span></div>
+        <div class="pc-setup">+ ₦150,000 one-time setup fee</div>
+        <div class="pc-line"></div>
+        <ul class="pc-list">
           <li>Up to 2,000 customers</li>
           <li>Automated win-back messages</li>
           <li>Birthday messages</li>
@@ -350,15 +308,14 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
           <li>Staff check-in page</li>
           <li>Priority support</li>
         </ul>
-        <button class="price-btn hot-btn" onclick="openModal('growth')">Get Started →</button>
+        <button class="pc-btn hb" onclick="openModal('Growth')">Get Started →</button>
       </div>
-      <!-- PRO -->
-      <div class="price-card">
-        <div class="price-plan">Pro</div>
-        <div class="price-amt">₦300,000<span>/mo</span></div>
-        <div class="price-setup">+ ₦250,000 one-time setup fee</div>
-        <div class="price-line"></div>
-        <ul class="price-list">
+      <div class="pc">
+        <div class="pc-plan">Pro</div>
+        <div class="pc-amt">₦300,000<span>/mo</span></div>
+        <div class="pc-setup">+ ₦250,000 one-time setup fee</div>
+        <div class="pc-line"></div>
+        <ul class="pc-list">
           <li>Unlimited customers</li>
           <li>Automated win-back messages</li>
           <li>Birthday messages</li>
@@ -367,7 +324,7 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
           <li>Staff check-in page</li>
           <li>Dedicated support</li>
         </ul>
-        <button class="price-btn" onclick="openModal('pro')">Get Started →</button>
+        <button class="pc-btn" onclick="openModal('Pro')">Get Started →</button>
       </div>
     </div>
   </div>
@@ -380,32 +337,30 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
   <div class="footer-txt">Built for Nigerian restaurants.</div>
 </footer>
 
-<!-- LEAD CAPTURE MODAL -->
-<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleClick(event)">
+  <div class="modal" id="modal">
+    <button class="m-close" onclick="closeModal()">×</button>
 
-    <!-- FORM STATE -->
-    <div id="modal-form">
-      <div class="modal-tag">Get Started with Refill</div>
-      <h3 class="modal-title">Let's get your restaurant set up.</h3>
-      <p class="modal-sub">Fill in your details — we'll contact you on WhatsApp within 24 hours.</p>
-
+    <div id="m-form">
+      <div class="m-tag">Get Started with Refill</div>
+      <h3 class="m-title">Let's get your restaurant set up.</h3>
+      <p class="m-sub">Fill in your details — we'll contact you on WhatsApp within 24 hours.</p>
       <div class="field">
         <label>Your Name</label>
-        <input type="text" id="lead-name" placeholder="e.g. Chidi Okafor">
+        <input type="text" id="f-name" placeholder="e.g. Chidi Okafor">
       </div>
       <div class="field">
         <label>Restaurant Name</label>
-        <input type="text" id="lead-restaurant" placeholder="e.g. Brandas Food">
+        <input type="text" id="f-restaurant" placeholder="e.g. Mama's Kitchen">
       </div>
       <div class="field">
         <label>WhatsApp Number</label>
-        <input type="tel" id="lead-phone" placeholder="e.g. 08012345678">
+        <input type="tel" id="f-phone" placeholder="e.g. 08012345678">
       </div>
       <div class="field">
         <label>Plan Interested In</label>
-        <select id="lead-plan">
+        <select id="f-plan">
           <option value="" disabled selected>Select a plan</option>
           <option value="Starter">Starter — ₦80,000/mo</option>
           <option value="Growth">Growth — ₦150,000/mo</option>
@@ -413,88 +368,84 @@ footer{padding:clamp(36px,5vw,56px) 6%;border-top:1px solid rgba(255,255,255,.05
           <option value="Not sure">Not sure yet</option>
         </select>
       </div>
-      <p id="lead-error" style="color:#ff4444;font-size:12px;margin-bottom:12px;display:none">Please fill in all fields</p>
-      <button class="modal-submit" id="modal-submit-btn" onclick="submitLead()">Contact Me on WhatsApp →</button>
+      <p class="m-err" id="m-err">Please fill in all fields</p>
+      <button class="m-submit" id="m-btn" onclick="submitLead()">Contact Me on WhatsApp →</button>
     </div>
 
-    <!-- SUCCESS STATE -->
-    <div class="modal-success" id="modal-success">
-      <div class="success-ic">🎉</div>
-      <div class="success-title">We Got You!</div>
-      <p class="success-msg">Thanks <strong id="success-name" style="color:var(--g)"></strong>!<br><br>We'll contact you on WhatsApp within 24 hours to get <strong id="success-restaurant" style="color:var(--w)"></strong> set up on Refill.<br><br>Get ready to never lose a customer again. 💪</p>
+    <div class="m-success" id="m-success">
+      <div class="s-ic">🎉</div>
+      <div class="s-title">We Got You!</div>
+      <p class="s-msg">
+        Thanks <strong id="s-name" style="color:var(--g)"></strong>!<br><br>
+        We'll contact you on WhatsApp within 24 hours to get
+        <strong id="s-rest" style="color:var(--w)"></strong> set up on Refill.<br><br>
+        Get ready to never lose a customer again. 💪
+      </p>
     </div>
   </div>
 </div>
 
 <script>
-// ── MODAL ──
-let selectedPlan = '';
+var LEADS_URL = 'https://script.google.com/macros/s/AKfycbwlEytZYeGiigbQJ9fE36nf1j-Ahl8--RVR7oKDgCViNcIXQUhcNW7q10AAFdg8gxQWmg/exec';
 
-function openModal(source) {
-  const planMap = { starter:'Starter', growth:'Growth', pro:'Pro' };
-  if (planMap[source]) {
-    selectedPlan = planMap[source];
-    document.getElementById('lead-plan').value = planMap[source];
+function openModal(plan) {
+  if (plan) {
+    var sel = document.getElementById('f-plan');
+    sel.value = plan;
   }
-  document.getElementById('modal').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-  document.getElementById('modal').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
 
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modal')) closeModal();
+function handleClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
 
-// ── LEAD SUBMIT ──
-const LEADS_SHEET = const LEADS_SHEET = 'https://script.google.com/macros/s/AKfycbwlEytZYeGiigbQJ9fE36nf1j-Ahl8--RVR7oKDgCViNcIXQUhcNW7q10AAFdg8gxQWmg/exec';
 function submitLead() {
-  const name       = document.getElementById('lead-name').value.trim();
-  const restaurant = document.getElementById('lead-restaurant').value.trim();
-  const phone      = document.getElementById('lead-phone').value.trim();
-  const plan       = document.getElementById('lead-plan').value;
+  var name = document.getElementById('f-name').value.trim();
+  var restaurant = document.getElementById('f-restaurant').value.trim();
+  var phone = document.getElementById('f-phone').value.trim();
+  var plan = document.getElementById('f-plan').value;
 
   if (!name || !restaurant || !phone || !plan) {
-    document.getElementById('lead-error').style.display = 'block';
+    document.getElementById('m-err').style.display = 'block';
     return;
   }
-  document.getElementById('lead-error').style.display = 'none';
+  document.getElementById('m-err').style.display = 'none';
 
-  const btn = document.getElementById('modal-submit-btn');
+  var btn = document.getElementById('m-btn');
   btn.innerHTML = 'Sending... <span class="spin"></span>';
   btn.disabled = true;
 
-  const payload = {
-    type: 'lead',
-    name, restaurant, phone, plan,
-    date: new Date().toISOString()
-  };
-
-  fetch(LEADS_SHEET, {
+  fetch(LEADS_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ name: name, restaurant: restaurant, phone: phone, plan: plan, date: new Date().toISOString() })
   })
-  .finally(() => {
-    document.getElementById('success-name').textContent = name;
-    document.getElementById('success-restaurant').textContent = restaurant;
-    document.getElementById('modal-form').style.display = 'none';
-    document.getElementById('modal-success').style.display = 'block';
+  .finally(function() {
+    document.getElementById('s-name').textContent = name;
+    document.getElementById('s-rest').textContent = restaurant;
+    document.getElementById('m-form').style.display = 'none';
+    document.getElementById('m-success').style.display = 'block';
   });
 }
 
-// ── SCROLL REVEAL ──
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+// Scroll reveal
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('on'); });
 }, { threshold: 0.08 });
 
-document.querySelectorAll('.reveal').forEach((el, i) => {
+document.querySelectorAll('.reveal').forEach(function(el, i) {
   el.style.transitionDelay = (i % 4 * 0.1) + 's';
   obs.observe(el);
 });
