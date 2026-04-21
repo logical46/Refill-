@@ -452,8 +452,7 @@ function handleOverlayClick(e) {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
 // ── LEAD SUBMIT ──
-const LEADS_SHEET = 'https://script.google.com/macros/s/AKfycbwoVm_A8eom2PlFSgNy1G6lezGS8Gaxy4uf3mfnI31AlNkbi0Y0NSXhC16zXnXMRvhz/exec';
-
+const LEADS_SHEET = const LEADS_SHEET = 'https://script.google.com/macros/s/AKfycbwlEytZYeGiigbQJ9fE36nf1j-Ahl8--RVR7oKDgCViNcIXQUhcNW7q10AAFdg8gxQWmg/exec';
 function submitLead() {
   const name       = document.getElementById('lead-name').value.trim();
   const restaurant = document.getElementById('lead-restaurant').value.trim();
