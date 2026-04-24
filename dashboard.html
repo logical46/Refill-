@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandas — Customer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#D4AF37;--gold-l:#F0D060;--orange:#FF6B35;
+  --d:#080808;--d2:#0d0d0d;--d3:#131313;--d4:#1a1a1a;
+  --w:#fff;--w2:#e8eaf0;--gr:#666;--grl:#999;
+  --green:#52B788;--red:#FF4444;--blue:#4A90E2;--yellow:#F0D060;
+  --border:rgba(255,255,255,.07);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--d);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* NAV */
+.nav{background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:5px;background:linear-gradient(135deg,var(--gold),var(--gold-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gr);background:var(--d4);border:1px solid var(--border);padding:6px 14px;border-radius:100px}
+.refresh-btn{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);color:var(--gold);padding:8px 16px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.refresh-btn:hover{background:rgba(212,175,55,.2)}
+.refresh-btn.spinning .refresh-icon{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* MAIN */
+.main{padding:32px 24px;max-width:1200px;margin:0 auto}
+
+/* HEADER */
+.page-header{margin-bottom:32px}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;margin-bottom:6px}
+.page-sub{font-size:14px;color:var(--gr)}
+.last-updated{font-size:11px;color:var(--gr);margin-top:4px}
+
+/* LOADING */
+.loading-state{text-align:center;padding:80px 24px}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+.loading-text{font-size:14px;color:var(--gr)}
+
+/* ERROR */
+.error-state{text-align:center;padding:80px 24px;display:none}
+.error-icon{font-size:48px;margin-bottom:16px}
+.error-text{font-size:14px;color:var(--gr)}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:24px 20px;position:relative;overflow:hidden;transition:border-color .3s}
+.stat-card:hover{border-color:rgba(255,255,255,.12)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.total::before{background:linear-gradient(90deg,var(--gold),var(--orange))}
+.stat-card.active::before{background:linear-gradient(90deg,var(--green),#2D6A4F)}
+.stat-card.cold::before{background:linear-gradient(90deg,var(--red),#c0392b)}
+.stat-card.birthday::before{background:linear-gradient(90deg,var(--blue),#8e44ad)}
+.stat-icon{font-size:24px;margin-bottom:12px}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:800;line-height:1;margin-bottom:4px}
+.stat-card.total .stat-num{background:linear-gradient(135deg,var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card.active .stat-num{color:var(--green)}
+.stat-card.cold .stat-num{color:var(--red)}
+.stat-card.birthday .stat-num{color:var(--blue)}
+.stat-label{font-size:12px;color:var(--gr);text-transform:uppercase;letter-spacing:1px}
+.stat-sub{font-size:11px;color:var(--gr);margin-top:4px}
+
+/* SECTIONS */
+.sections-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.section-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.section-card.full{grid-column:1/-1}
+.section-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-count{font-size:11px;color:var(--gr);background:var(--d4);border:1px solid var(--border);padding:3px 10px;border-radius:100px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gr);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+td{font-size:13px;color:var(--w2);padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-active{background:rgba(82,183,136,.12);color:var(--green);border:1px solid rgba(82,183,136,.2)}
+.badge-cold{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* FOOD TAGS */
+.food-tag{display:inline-block;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.15);border-radius:100px;padding:3px 10px;font-size:11px;color:var(--gold);margin:2px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px;color:var(--gr);font-size:14px}
+
+/* BIRTHDAY CARD */
+.birthday-list{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.birthday-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(74,144,226,.06);border:1px solid rgba(74,144,226,.15);border-radius:8px}
+.birthday-emoji{font-size:24px;flex-shrink:0}
+.birthday-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+.birthday-phone{font-size:12px;color:var(--gr);margin-top:2px}
+
+/* FOOD CHART */
+.food-chart{padding:20px}
+.food-bar-row{margin-bottom:14px}
+.food-bar-label{display:flex;justify-content:space-between;margin-bottom:6px}
+.food-bar-name{font-size:13px;color:var(--w2)}
+.food-bar-count{font-size:12px;color:var(--gr)}
+.food-bar-track{height:6px;background:rgba(255,255,255,.06);border-radius:100px;overflow:hidden}
+.food-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width 1s ease}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .sections-grid{grid-template-columns:1fr}
+  .section-card.full{grid-column:auto}
+}
+@media(max-width:500px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .main{padding:20px 16px}
+  .nav{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-logo">BRANDAS</div>
+  <div class="nav-right">
+    <div class="nav-tag">Dashboard</div>
+    <button class="refresh-btn" onclick="loadData()" id="refresh-btn">
+      <span class="refresh-icon">↻</span> Refresh
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="page-header">
+    <h1 class="page-title">Customer Overview</h1>
+    <p class="page-sub">Real-time view of your customer base, activity, and retention metrics.</p>
+    <p class="last-updated" id="last-updated">Loading...</p>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-state" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading customer data...</div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-state" id="error">
+    <div class="error-icon">⚠️</div>
+    <div class="error-text">Could not load data. Please refresh.</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content" style="display:none">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card total">
+        <div class="stat-icon">👥</div>
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Total Customers</div>
+        <div class="stat-sub">All registered</div>
+      </div>
+      <div class="stat-card active">
+        <div class="stat-icon">✅</div>
+        <div class="stat-num" id="stat-active">0</div>
+        <div class="stat-label">Active</div>
+        <div class="stat-sub">Visited recently</div>
+      </div>
+      <div class="stat-card cold">
+        <div class="stat-icon">🔴</div>
+        <div class="stat-num" id="stat-cold">0</div>
+        <div class="stat-label">Cold</div>
+        <div class="stat-sub">Need win-back</div>
+      </div>
+      <div class="stat-card birthday">
+        <div class="stat-icon">🎂</div>
+        <div class="stat-num" id="stat-birthday">0</div>
+        <div class="stat-label">Birthdays Today</div>
+        <div class="stat-sub">Messages sent</div>
+      </div>
+    </div>
+
+    <!-- COLD + RECENT -->
+    <div class="sections-grid">
+
+      <!-- COLD CUSTOMERS -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🔴 Cold Customers</div>
+          <div class="section-count" id="cold-count">0</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Last Visit</th>
+                <th>Days Away</th>
+              </tr>
+            </thead>
+            <tbody id="cold-table">
+              <tr><td colspan="4" class="empty-state">No cold customers 🎉</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BIRTHDAYS TODAY -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🎂 Birthdays Today</div>
+          <div class="section-count" id="bday-count">0</div>
+        </div>
+        <div class="birthday-list" id="birthday-list">
+          <div class="empty-state">No birthdays today</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOD PREFERENCES -->
+    <div class="sections-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🍽️ Popular Food Preferences</div>
+        </div>
+        <div class="food-chart" id="food-chart">
+          <div class="empty-state">No data yet</div>
+        </div>
+      </div>
+
+      <!-- RECENT SIGNUPS -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">🆕 Recent Sign-Ups</div>
+          <div class="section-count" id="recent-count">0</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Joined</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recent-table">
+              <tr><td colspan="3" class="empty-state">No data yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL CUSTOMERS -->
+    <div class="section-card full">
+      <div class="section-header">
+        <div class="section-title">👥 All Customers</div>
+        <div class="section-count" id="all-count">0</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Food Prefs</th>
+              <th>Frequency</th>
+              <th>Last Visit</th>
+              <th>Status</th>
+              <th>Messaged</th>
+            </tr>
+          </thead>
+          <tbody id="all-table">
+            <tr><td colspan="7" class="empty-state">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTT0CNwrGwVW3myTV1_zW-VpyHGZQpfQ42kFElj9MyZksE04di4LTDsVB5IWESCKpdw36onLAYt1jSZ/pub?gid=0&single=true&output=csv';
+
+function loadData() {
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('content').style.display = 'none';
+  document.getElementById('error').style.display = 'none';
+
+  var btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+
+  var url = CSV_URL + '&t=' + Date.now();
+
+  fetch(url)
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      var customers = parseCSV(csv);
+      renderDashboard(customers);
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+      btn.classList.remove('spinning');
+    })
+    .catch(function(err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'block';
+      btn.classList.remove('spinning');
+    });
+}
+
+function parseCSV(csv) {
+  var lines = csv.trim().split('\n');
+  var customers = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = splitCSVLine(lines[i]);
+    if (cols.length < 2 || !cols[0]) continue;
+    customers.push({
+      name:      cols[0] ? cols[0].trim() : '',
+      phone:     cols[1] ? cols[1].trim() : '',
+      food:      cols[2] ? cols[2].trim() : '',
+      frequency: cols[3] ? cols[3].trim() : '',
+      birthday:  cols[4] ? cols[4].trim() : '',
+      joined:    cols[5] ? cols[5].trim() : '',
+      lastVisit: cols[6] ? cols[6].trim() : '',
+      status:    cols[7] ? cols[7].trim() : '',
+      messaged:  cols[8] ? cols[8].trim() : '0'
+    });
+  }
+  return customers;
+}
+
+function splitCSVLine(line) {
+  var result = [];
+  var current = '';
+  var inQuotes = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    if (ch === '"') { inQuotes = !inQuotes; }
+    else if (ch === ',' && !inQuotes) { result.push(current); current = ''; }
+    else { current += ch; }
+  }
+  result.push(current);
+  return result;
+}
+
+function daysSince(dateStr) {
+  if (!dateStr) return 0;
+  var d = new Date(dateStr);
+  if (isNaN(d)) return 0;
+  return Math.floor((new Date() - d) / (1000 * 60 * 60 * 24));
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  var d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  return d.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function isBirthdayToday(dateStr) {
+  if (!dateStr) return false;
+  var d = new Date(dateStr);
+  if (isNaN(d)) return false;
+  var today = new Date();
+  return d.getDate() === today.getDate() && d.getMonth() === today.getMonth();
+}
+
+function renderDashboard(customers) {
+  var total = customers.length;
+  var active = customers.filter(function(c) { return c.status.toLowerCase() === 'active'; }).length;
+  var cold = customers.filter(function(c) { return c.status.toLowerCase() === 'cold'; }).length;
+  var birthdays = customers.filter(function(c) { return isBirthdayToday(c.birthday); });
+
+  // Stats
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-active').textContent = active;
+  document.getElementById('stat-cold').textContent = cold;
+  document.getElementById('stat-birthday').textContent = birthdays.length;
+  document.getElementById('cold-count').textContent = cold;
+  document.getElementById('bday-count').textContent = birthdays.length;
+  document.getElementById('all-count').textContent = total;
+
+  // Cold customers
+  var coldCustomers = customers.filter(function(c) { return c.status.toLowerCase() === 'cold'; });
+  var coldHTML = '';
+  if (coldCustomers.length === 0) {
+    coldHTML = '<tr><td colspan="4" class="empty-state">No cold customers 🎉</td></tr>';
+  } else {
+    coldCustomers.forEach(function(c) {
+      var days = daysSince(c.lastVisit);
+      coldHTML += '<tr>' +
+        '<td><strong>' + c.name + '</strong></td>' +
+        '<td style="color:var(--gr)">' + c.phone + '</td>' +
+        '<td style="color:var(--gr)">' + formatDate(c.lastVisit) + '</td>' +
+        '<td><span style="color:var(--red);font-weight:600">' + days + ' days</span></td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('cold-table').innerHTML = coldHTML;
+
+  // Birthdays
+  var bdayHTML = '';
+  if (birthdays.length === 0) {
+    bdayHTML = '<div class="empty-state">No birthdays today 🎂</div>';
+  } else {
+    birthdays.forEach(function(c) {
+      bdayHTML += '<div class="birthday-item">' +
+        '<div class="birthday-emoji">🎂</div>' +
+        '<div><div class="birthday-name">' + c.name + '</div>' +
+        '<div class="birthday-phone">' + c.phone + '</div></div>' +
+        '</div>';
+    });
+  }
+  document.getElementById('birthday-list').innerHTML = bdayHTML;
+
+  // Food preferences
+  var foodMap = {};
+  customers.forEach(function(c) {
+    if (!c.food) return;
+    var items = c.food.split(',');
+    items.forEach(function(item) {
+      var f = item.trim();
+      if (f) foodMap[f] = (foodMap[f] || 0) + 1;
+    });
+  });
+  var foodEntries = Object.keys(foodMap).map(function(k) { return { name: k, count: foodMap[k] }; });
+  foodEntries.sort(function(a,b) { return b.count - a.count; });
+  var maxFood = foodEntries.length > 0 ? foodEntries[0].count : 1;
+  var foodHTML = '';
+  if (foodEntries.length === 0) {
+    foodHTML = '<div class="empty-state">No food data yet</div>';
+  } else {
+    foodEntries.forEach(function(f) {
+      var pct = Math.round((f.count / maxFood) * 100);
+      foodHTML += '<div class="food-bar-row">' +
+        '<div class="food-bar-label">' +
+        '<span class="food-bar-name">' + f.name + '</span>' +
+        '<span class="food-bar-count">' + f.count + ' customers</span>' +
+        '</div>' +
+        '<div class="food-bar-track"><div class="food-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '</div>';
+    });
+  }
+  document.getElementById('food-chart').innerHTML = foodHTML;
+
+  // Recent signups (last 10)
+  var sorted = customers.slice().sort(function(a,b) {
+    return new Date(b.joined) - new Date(a.joined);
+  });
+  var recent = sorted.slice(0, 10);
+  document.getElementById('recent-count').textContent = recent.length;
+  var recentHTML = '';
+  if (recent.length === 0) {
+    recentHTML = '<tr><td colspan="3" class="empty-state">No signups yet</td></tr>';
+  } else {
+    recent.forEach(function(c) {
+      var badgeClass = c.status.toLowerCase() === 'cold' ? 'badge-cold' : 'badge-active';
+      var statusText = c.status || 'Active';
+      recentHTML += '<tr>' +
+        '<td><strong>' + c.name + '</strong></td>' +
+        '<td style="color:var(--gr)">' + formatDate(c.joined) + '</td>' +
+        '<td><span class="badge ' + badgeClass + '"><span class="badge-dot"></span>' + statusText + '</span></td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('recent-table').innerHTML = recentHTML;
+
+  // All customers
+  var allHTML = '';
+  if (customers.length === 0) {
+    allHTML = '<tr><td colspan="7" class="empty-state">No customers yet</td></tr>';
+  } else {
+    customers.forEach(function(c) {
+      var badgeClass = c.status.toLowerCase() === 'cold' ? 'badge-cold' : 'badge-active';
+      var statusText = c.status || 'Active';
+      var foodTags = '';
+      if (c.food) {
+        c.food.split(',').forEach(function(f) {
+          if (f.trim()) foodTags += '<span class="food-tag">' + f.trim() + '</span>';
+        });
+      }
+      allHTML += '<tr>' +
+        '<td><strong>' + c.name + '</strong></td>' +
+        '<td style="color:var(--gr)">' + c.phone + '</td>' +
+        '<td>' + (foodTags || '<span style="color:var(--gr)">—</span>') + '</td>' +
+        '<td style="color:var(--gr)">' + (c.frequency || '—') + '</td>' +
+        '<td style="color:var(--gr)">' + formatDate(c.lastVisit) + '</td>' +
+        '<td><span class="badge ' + badgeClass + '"><span class="badge-dot"></span>' + statusText + '</span></td>' +
+        '<td style="color:var(--gr);text-align:center">' + (c.messaged || '0') + '</td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('all-table').innerHTML = allHTML;
+}
+
+// Load on start
+loadData();
+
+// Auto refresh every 5 minutes
+setInterval(loadData, 5 * 60 * 1000);
+</script>
+</body>
+</html>
