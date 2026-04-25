@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP Signup</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#D4AF37;--gold-l:#F0D060;--orange:#FF6B35;
+  --d:#080808;--d2:#111;--d3:#1a1a1a;
+  --w:#fff;--gr:#777;--grl:#bbb;
+  --primary:#D4AF37;--primary-dark:#b8941e;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--d);color:var(--w);font-family:'Poppins',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.4}
+.bg-blob{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.blob1{width:400px;height:400px;background:radial-gradient(circle,rgba(212,175,55,.12),transparent 70%);top:-100px;right:-100px;animation:blobFloat 8s ease-in-out infinite}
+.blob2{width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,53,.08),transparent 70%);bottom:100px;left:-80px;animation:blobFloat 10s ease-in-out infinite reverse}
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+.corner{position:fixed;width:60px;height:60px;pointer-events:none;z-index:5;opacity:.3}
+.c-tl{top:24px;left:24px;border-top:1px solid var(--primary);border-left:1px solid var(--primary)}
+.c-tr{top:24px;right:24px;border-top:1px solid var(--primary);border-right:1px solid var(--primary)}
+.c-bl{bottom:24px;left:24px;border-bottom:1px solid var(--primary);border-left:1px solid var(--primary)}
+.c-br{bottom:24px;right:24px;border-bottom:1px solid var(--primary);border-right:1px solid var(--primary)}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--d);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px}
+.loading-spinner{width:40px;height:40px;border:3px solid rgba(212,175,55,.2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--gr);letter-spacing:2px;text-transform:uppercase}
+
+/* ERROR SCREEN */
+.error-screen{position:fixed;inset:0;background:var(--d);display:none;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;text-align:center;padding:24px}
+.error-icon{font-size:48px}
+.error-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;color:var(--gold)}
+.error-sub{font-size:14px;color:var(--gr);line-height:1.7}
+
+.container{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px}
+.screen{display:none;flex-direction:column;align-items:center;width:100%;max-width:420px;animation:screenIn .6s cubic-bezier(.16,1,.3,1) forwards}
+.screen.active{display:flex}
+@keyframes screenIn{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* LOGO */
+.logo{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:6px;text-align:center;margin-bottom:4px;animation:logoGlow 3s ease-in-out infinite}
+@keyframes logoGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(212,175,55,.3))}50%{filter:drop-shadow(0 0 20px rgba(212,175,55,.6))}}
+.logo-sub{font-size:10px;letter-spacing:8px;color:var(--gr);text-transform:uppercase;text-align:center;margin-bottom:48px}
+.gold-line{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--primary),transparent);margin:20px auto}
+.headline{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:.95;text-align:center;letter-spacing:2px;margin-bottom:16px}
+.headline .hl{-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtext{font-size:13px;color:var(--gr);text-align:center;line-height:1.8;margin-bottom:48px;font-weight:300;letter-spacing:.5px}
+
+/* BUTTON */
+.btn-main{color:#000;border:none;padding:18px 48px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;border-radius:2px;cursor:pointer;transition:transform .2s,box-shadow .2s;animation:btnPulse 2.5s ease-in-out infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 8px 32px rgba(212,175,55,.25)}50%{box-shadow:0 8px 48px rgba(212,175,55,.5),0 0 0 8px rgba(212,175,55,.05)}}
+.btn-main:hover{transform:translateY(-2px);animation:none}
+
+/* STEPS */
+.step-indicator{display:flex;align-items:center;gap:8px;margin-bottom:40px}
+.step-dot{width:8px;height:8px;border-radius:50%;background:var(--d3);border:1px solid #333;transition:all .3s ease}
+.step-dot.active{background:var(--primary);border-color:var(--primary);box-shadow:0 0 12px rgba(212,175,55,.5);width:24px;border-radius:4px}
+.step-dot.done{background:var(--primary);border-color:var(--primary);opacity:.4}
+.step-label{font-size:10px;letter-spacing:4px;color:var(--primary);text-transform:uppercase;margin-bottom:12px;font-weight:500;text-align:center}
+.form-question{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:1px;text-align:center;margin-bottom:8px;line-height:1.1}
+.form-hint{font-size:12px;color:var(--gr);text-align:center;margin-bottom:32px;font-weight:300}
+
+/* INPUTS */
+.input-wrap{width:100%;position:relative;margin-bottom:24px}
+.input-wrap input,.input-wrap input[type="date"]{width:100%;background:rgba(255,255,255,.03);border:1px solid #2a2a2a;border-radius:4px;padding:18px 20px;color:var(--w);font-family:'Poppins',sans-serif;font-size:16px;outline:none;transition:all .3s ease;color-scheme:dark}
+.input-wrap input::placeholder{color:#444}
+.input-wrap input:focus{border-color:var(--primary);background:rgba(212,175,55,.04);box-shadow:0 0 0 1px rgba(212,175,55,.2),0 8px 32px rgba(212,175,55,.08)}
+.phone-row{display:flex;gap:10px;width:100%}
+.phone-flag{background:rgba(255,255,255,.03);border:1px solid #2a2a2a;border-radius:4px;padding:18px 16px;color:var(--w);font-size:14px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.phone-row input{flex:1}
+
+/* FOOD OPTIONS */
+.food-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin-bottom:24px}
+.food-option{background:rgba(255,255,255,.03);border:1px solid #2a2a2a;border-radius:8px;padding:16px 12px;cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.food-option:hover{border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.05);transform:translateY(-2px)}
+.food-option.selected{border-color:var(--primary);background:rgba(212,175,55,.1);box-shadow:0 0 24px rgba(212,175,55,.15);transform:scale(1.05)}
+.food-option .emoji{font-size:28px;transition:transform .3s ease}
+.food-option.selected .emoji{transform:scale(1.3);animation:emojiPop .4s cubic-bezier(.16,1,.3,1)}
+@keyframes emojiPop{0%{transform:scale(1)}50%{transform:scale(1.6)}100%{transform:scale(1.3)}}
+.food-option .food-label{font-size:11px;color:var(--gr);font-weight:500;letter-spacing:.5px}
+.food-option.selected .food-label{color:var(--primary)}
+
+/* BTN NEXT */
+.btn-next{width:100%;color:#000;border:none;padding:18px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:4px;cursor:pointer;transition:all .3s ease;box-shadow:0 8px 24px rgba(212,175,55,.2)}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(212,175,55,.35)}
+.btn-back{background:none;border:none;color:#555;font-family:'Poppins',sans-serif;font-size:12px;cursor:pointer;margin-top:16px;letter-spacing:1px;transition:color .2s}
+.btn-back:hover{color:var(--gr)}
+.btn-skip{background:none;border:none;color:#666;font-family:'Poppins',sans-serif;font-size:12px;cursor:pointer;margin-top:8px;letter-spacing:1px;text-decoration:underline;transition:color .2s}
+.btn-skip:hover{color:var(--gr)}
+
+/* ERROR */
+.error-msg{color:#ff4444;font-size:11px;margin-top:-16px;margin-bottom:16px;letter-spacing:.5px;display:none}
+
+/* SUCCESS */
+.success-icon{width:80px;height:80px;border-radius:50%;border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:32px;animation:successPop .6s cubic-bezier(.16,1,.3,1);box-shadow:0 0 40px rgba(212,175,55,.3)}
+@keyframes successPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:4px;text-align:center;margin-bottom:16px;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.success-text{font-size:14px;color:var(--gr);text-align:center;line-height:1.8;font-weight:300}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;animation:confettiFall linear forwards;z-index:999;border-radius:2px}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* SPINNER */
+.spin-btn{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-left:8px}
+
+@media(max-width:380px){.headline{font-size:52px}.form-question{font-size:30px}.logo{font-size:34px}}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loading-screen">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Loading...</div>
+</div>
+
+<!-- ERROR -->
+<div class="error-screen" id="error-screen">
+  <div class="error-icon">⚠️</div>
+  <div class="error-title">Restaurant Not Found</div>
+  <div class="error-sub">This signup link is invalid or expired.<br>Please contact the restaurant for a valid link.</div>
+</div>
+
+<div class="bg-blob blob1"></div>
+<div class="bg-blob blob2"></div>
+<div class="corner c-tl"></div>
+<div class="corner c-tr"></div>
+<div class="corner c-bl"></div>
+<div class="corner c-br"></div>
+
+<div class="container" id="main-container" style="display:none">
+
+  <!-- SCREEN 1: HERO -->
+  <div class="screen active" id="screen1">
+    <div class="logo" id="hero-logo">LOADING</div>
+    <div class="logo-sub" id="hero-tagline">Food & Dining</div>
+    <div class="gold-line"></div>
+    <h1 class="headline">JOIN THE<br><span class="hl" id="hero-hl">VIP TABLE</span></h1>
+    <div class="gold-line"></div>
+    <p class="subtext">Be the first to know.<br>Be the first to enjoy.<br><span style="color:#555">— Exclusive access for our regulars —</span></p>
+    <button class="btn-main" id="hero-btn" onclick="goToScreen(2)">CLAIM YOUR SPOT →</button>
+    <p style="font-size:11px;color:#333;margin-top:24px;letter-spacing:1px">Takes only 30 seconds</p>
+  </div>
+
+  <!-- SCREEN 2: NAME -->
+  <div class="screen" id="screen2">
+    <div class="step-indicator">
+      <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+    </div>
+    <div class="step-label">Step 1 of 5</div>
+    <h2 class="form-question">WHAT DO<br>WE CALL YOU?</h2>
+    <p class="form-hint">Enter your first name</p>
+    <div class="input-wrap">
+      <input type="text" id="nameInput" placeholder="Your name..." autocomplete="off">
+    </div>
+    <p class="error-msg" id="nameError">Please enter your name</p>
+    <button class="btn-next" id="btn-next-name" onclick="submitName()">NEXT →</button>
+    <button class="btn-back" onclick="goToScreen(1)">← back</button>
+  </div>
+
+  <!-- SCREEN 3: PHONE -->
+  <div class="screen" id="screen3">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+    </div>
+    <div class="step-label">Step 2 of 5</div>
+    <h2 class="form-question">YOUR<br>WHATSAPP<br>NUMBER?</h2>
+    <p class="form-hint">We'll reach you here with exclusive updates</p>
+    <div class="phone-row input-wrap">
+      <div class="phone-flag">🇳🇬 +234</div>
+      <input type="tel" id="phoneInput" placeholder="08012345678..." maxlength="11">
+    </div>
+    <p class="error-msg" id="phoneError">Please enter a valid number</p>
+    <button class="btn-next" id="btn-next-phone" onclick="submitPhone()">NEXT →</button>
+    <button class="btn-back" onclick="goToScreen(2)">← back</button>
+  </div>
+
+  <!-- SCREEN 4: FOOD -->
+  <div class="screen" id="screen4">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
+    </div>
+    <div class="step-label">Step 3 of 5</div>
+    <h2 class="form-question">YOUR<br>FAVOURITE<br>ORDER?</h2>
+    <p class="form-hint">Tap all that apply 🔥</p>
+    <div class="food-options" id="food-options-grid"></div>
+    <p class="error-msg" id="foodError">Please select at least one favourite</p>
+    <button class="btn-next" id="btn-next-food" onclick="submitFood()">NEXT →</button>
+    <button class="btn-back" onclick="goToScreen(3)">← back</button>
+  </div>
+
+  <!-- SCREEN 5: FREQUENCY -->
+  <div class="screen" id="screen5">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div>
+    </div>
+    <div class="step-label">Step 4 of 5</div>
+    <h2 class="form-question">HOW OFTEN<br>DO YOU<br>VISIT US?</h2>
+    <p class="form-hint">Be honest — no wrong answers 😄</p>
+    <div class="food-options">
+      <div class="food-option" onclick="selectFreq(this,'First Time')"><div class="emoji">👋</div><div class="food-label">First Time</div></div>
+      <div class="food-option" onclick="selectFreq(this,'Weekly')"><div class="emoji">🔥</div><div class="food-label">Weekly</div></div>
+      <div class="food-option" onclick="selectFreq(this,'Monthly')"><div class="emoji">📅</div><div class="food-label">Monthly</div></div>
+      <div class="food-option" onclick="selectFreq(this,'Occasionally')"><div class="emoji">🌟</div><div class="food-label">Occasionally</div></div>
+    </div>
+    <p class="error-msg" id="freqError">Please select how often you visit</p>
+    <button class="btn-next" id="btn-next-freq" onclick="submitFreq()">NEXT →</button>
+    <button class="btn-back" onclick="goToScreen(4)">← back</button>
+  </div>
+
+  <!-- SCREEN 6: BIRTHDAY -->
+  <div class="screen" id="screen6">
+    <div class="step-indicator">
+      <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div>
+    </div>
+    <div class="step-label">Step 5 of 5 — Almost there! 🎉</div>
+    <h2 class="form-question">WHEN IS<br>YOUR<br>BIRTHDAY? 🎂</h2>
+    <p class="form-hint">Optional — we'd love to celebrate with you</p>
+    <div class="input-wrap">
+      <input type="date" id="birthdayInput">
+    </div>
+    <button class="btn-next" id="submitBtn" onclick="submitForm()">JOIN THE VIP TABLE 👑</button>
+    <button class="btn-skip" onclick="skipBirthday()">Skip this step →</button>
+    <button class="btn-back" onclick="goToScreen(5)">← back</button>
+  </div>
+
+  <!-- SCREEN 7: SUCCESS -->
+  <div class="screen" id="screen7">
+    <div class="success-icon">👑</div>
+    <h2 class="success-title" id="success-title">YOU'RE NOW VIP!</h2>
+    <div class="gold-line"></div>
+    <p class="success-text">
+      Welcome to the table,<br>
+      <strong id="successName" style="font-size:18px"></strong>.<br><br>
+      Watch your WhatsApp —<br>we'll be in touch with<br>something special just for you.
+    </p>
+    <div class="gold-line"></div>
+    <p style="font-size:11px;color:#333;margin-top:24px;letter-spacing:2px;text-align:center" id="footer-text">© 2026</p>
+  </div>
+
+</div>
+
+<script>
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwebL9ZOkGwnzlXRJgp5Y6CaukjFnWlfbUAcEacecD7qgG3jjjaGfSMnQXmOW3AFdF1/exec';
+var MASTER_SHEET_ID = '1b0-FpqArRYBMhkaNdSxz-jro1hhqETq2Q-jOmYDfKm4';
+
+var formData = { name:'', phone:'', food:'', frequency:'', birthday:'', restaurantId:'' };
+var restaurant = null;
+var successShown = false;
+
+// ── DEFAULT MENU ITEMS (used if restaurant has no custom ones) ──
+var defaultMenu = [
+  {emoji:'🍛', label:'Rice Dishes'},
+  {emoji:'🥩', label:'Grilled Meats'},
+  {emoji:'🍗', label:'Chicken'},
+  {emoji:'🌮', label:'Snacks & Sides'},
+  {emoji:'🦐', label:'Seafood'},
+  {emoji:'🥤', label:'Drinks & Combos'}
+];
+
+// ── GET RESTAURANT ID FROM URL ──
+function getRestaurantId() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('r') || params.get('restaurant') || '';
+}
+
+// ── LOAD RESTAURANT FROM SHEET ──
+function loadRestaurant() {
+  var id = getRestaurantId();
+  if (!id) {
+    showError();
+    return;
+  }
+
+  formData.restaurantId = id;
+
+  var url = 'https://docs.google.com/spreadsheets/d/' + MASTER_SHEET_ID + '/export?format=csv&gid=0&t=' + Date.now();
+
+  fetch(url)
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      var rows = parseCSV(csv);
+      var found = null;
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i][0] && rows[i][0].toLowerCase().trim() === id.toLowerCase().trim()) {
+          found = rows[i];
+          break;
+        }
+      }
+      if (!found) {
+        showError();
+        return;
+      }
+      restaurant = {
+        id:       found[0] || id,
+        name:     found[1] || id.toUpperCase(),
+        owner:    found[2] || '',
+        tagline:  found[8] || 'Food & Dining',
+        color:    found[9] || '#D4AF37',
+        menu:     found[10] ? found[10].split('|') : []
+      };
+      applyBranding();
+      hideLoading();
+    })
+    .catch(function() {
+      // If sheet fetch fails use default branding with the ID
+      restaurant = {
+        id: id,
+        name: id.toUpperCase(),
+        tagline: 'Food & Dining',
+        color: '#D4AF37',
+        menu: []
+      };
+      applyBranding();
+      hideLoading();
+    });
+}
+
+function parseCSV(csv) {
+  var lines = csv.trim().split('\n');
+  var result = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = splitCSV(lines[i]);
+    if (!cols[0] || cols[0].trim() === '') continue;
+    result.push(cols.map(function(c) { return c.trim().replace(/^"|"$/g,''); }));
+  }
+  return result;
+}
+
+function splitCSV(line) {
+  var result = [], cur = '', inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; }
+    else if (line[i] === ',' && !inQ) { result.push(cur); cur = ''; }
+    else { cur += line[i]; }
+  }
+  result.push(cur);
+  return result;
+}
+
+// ── APPLY RESTAURANT BRANDING ──
+function applyBranding() {
+  var name = restaurant.name;
+  var color = restaurant.color || '#D4AF37';
+  var tagline = restaurant.tagline || 'Food & Dining';
+
+  // Update CSS color
+  document.documentElement.style.setProperty('--primary', color);
+  document.documentElement.style.setProperty('--primary-dark', color);
+
+  // Update text
+  document.getElementById('hero-logo').textContent = name;
+  document.getElementById('hero-tagline').textContent = tagline;
+  document.getElementById('hero-hl').textContent = 'VIP TABLE';
+  document.getElementById('hero-hl').style.background = 'linear-gradient(135deg,' + color + ',#F0D060)';
+  document.getElementById('hero-hl').style.webkitBackgroundClip = 'text';
+  document.getElementById('hero-hl').style.webkitTextFillColor = 'transparent';
+  document.getElementById('hero-hl').style.backgroundClip = 'text';
+
+  // Buttons
+  var btns = document.querySelectorAll('.btn-main, .btn-next');
+  btns.forEach(function(b) {
+    b.style.background = 'linear-gradient(135deg,' + color + ',#FF6B35)';
+  });
+
+  // Corners
+  document.querySelectorAll('.corner').forEach(function(c) {
+    c.style.borderColor = color;
+  });
+
+  // Gold lines
+  document.querySelectorAll('.gold-line').forEach(function(l) {
+    l.style.background = 'linear-gradient(90deg,transparent,' + color + ',transparent)';
+  });
+
+  // Step dots active color
+  document.querySelectorAll('.step-dot.active, .step-dot.done').forEach(function(d) {
+    d.style.background = color;
+    d.style.borderColor = color;
+  });
+
+  // Success
+  document.getElementById('success-title').style.background = 'linear-gradient(135deg,' + color + ',#F0D060)';
+  document.getElementById('success-title').style.webkitBackgroundClip = 'text';
+  document.getElementById('success-title').style.webkitTextFillColor = 'transparent';
+  document.getElementById('success-title').style.backgroundClip = 'text';
+  document.getElementById('footer-text').textContent = '© 2026 ' + name;
+  document.title = name + ' — VIP Table';
+
+  // Menu items
+  buildMenu();
+}
+
+function buildMenu() {
+  var items = defaultMenu;
+  if (restaurant.menu && restaurant.menu.length > 0) {
+    items = restaurant.menu.map(function(m) {
+      var parts = m.split(':');
+      return { emoji: parts[0] || '🍽️', label: parts[1] || m };
+    });
+  }
+  var html = '';
+  items.forEach(function(item) {
+    html += '<div class="food-option" onclick="selectFood(this,\'' + item.label + '\')">' +
+      '<div class="emoji">' + item.emoji + '</div>' +
+      '<div class="food-label">' + item.label + '</div>' +
+      '</div>';
+  });
+  document.getElementById('food-options-grid').innerHTML = html;
+}
+
+function hideLoading() {
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('main-container').style.display = 'flex';
+}
+
+function showError() {
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('error-screen').style.display = 'flex';
+}
+
+// ── NAVIGATION ──
+function goToScreen(n) {
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('screen' + n).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── FORM LOGIC ──
+function submitName() {
+  var v = document.getElementById('nameInput').value.trim();
+  if (v.length < 2) { document.getElementById('nameError').style.display='block'; return; }
+  document.getElementById('nameError').style.display='none';
+  formData.name = v;
+  goToScreen(3);
+}
+
+function submitPhone() {
+  var v = document.getElementById('phoneInput').value.trim();
+  if (v.length < 10) { document.getElementById('phoneError').style.display='block'; return; }
+  document.getElementById('phoneError').style.display='none';
+  formData.phone = '+234' + v.replace(/^0/,'');
+  goToScreen(4);
+}
+
+function selectFood(el, val) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+  } else {
+    el.classList.add('selected');
+  }
+  var selected = [];
+  document.querySelectorAll('#screen4 .food-option.selected').forEach(function(o) {
+    selected.push(o.querySelector('.food-label').textContent);
+  });
+  formData.food = selected.join(', ');
+  document.getElementById('foodError').style.display='none';
+}
+
+function submitFood() {
+  if (!formData.food) { document.getElementById('foodError').style.display='block'; return; }
+  goToScreen(5);
+}
+
+function selectFreq(el, val) {
+  document.querySelectorAll('#screen5 .food-option').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  formData.frequency = val;
+  document.getElementById('freqError').style.display='none';
+}
+
+function submitFreq() {
+  if (!formData.frequency) { document.getElementById('freqError').style.display='block'; return; }
+  goToScreen(6);
+}
+
+function submitForm() {
+  formData.birthday = document.getElementById('birthdayInput').value;
+  finalizeSubmission();
+}
+
+function skipBirthday() {
+  formData.birthday = '';
+  finalizeSubmission();
+}
+
+function finalizeSubmission() {
+  var btn = document.getElementById('submitBtn');
+  btn.innerHTML = 'JOINING... <span class="spin-btn"></span>';
+  btn.disabled = true;
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', SCRIPT_URL, true);
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      document.getElementById('successName').textContent = formData.name;
+      goToScreen(7);
+      if (!successShown) { launchConfetti(); successShown = true; }
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('successName').textContent = formData.name;
+    goToScreen(7);
+    if (!successShown) { launchConfetti(); successShown = true; }
+  };
+  xhr.send(JSON.stringify({
+    type:         'customer',
+    restaurantId: formData.restaurantId,
+    name:         formData.name,
+    phone:        formData.phone,
+    food:         formData.food,
+    frequency:    formData.frequency,
+    birthday:     formData.birthday
+  }));
+}
+
+function launchConfetti() {
+  var colors = ['#D4AF37','#F0D060','#FF6B35','#ffffff','#ff4444'];
+  for (var i = 0; i < 60; i++) {
+    setTimeout(function() {
+      var c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random()*100+'vw';
+      c.style.background = colors[Math.floor(Math.random()*colors.length)];
+      c.style.animationDuration = (Math.random()*2+2)+'s';
+      c.style.width = c.style.height = (Math.random()*8+4)+'px';
+      c.style.borderRadius = Math.random()>.5?'50%':'2px';
+      document.body.appendChild(c);
+      setTimeout(function() { c.remove(); }, 4000);
+    }, i*40);
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  var active = document.querySelector('.screen.active');
+  if (!active) return;
+  var id = active.id;
+  if (id === 'screen2') submitName();
+  else if (id === 'screen3') submitPhone();
+  else if (id === 'screen4') submitFood();
+  else if (id === 'screen5') submitFreq();
+  else if (id === 'screen6') submitForm();
+});
+
+// ── INIT ──
+loadRestaurant();
+</script>
+</body>
+</html>
