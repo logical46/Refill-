@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refill — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g:#3ECF8E;--gd:#25a36e;--g2:rgba(62,207,142,.1);
+  --gold:#D4AF37;--gold2:rgba(212,175,55,.1);
+  --d:#07080A;--d2:#0D0F12;--d3:#13161A;--d4:#1A1E24;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.04);
+  --w:#fff;--w2:#E8EAF0;--w3:#9BA3AF;--w4:#5C6370;
+  --red:#FF4444;--blue:#4A90E2;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--d);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--d);position:relative}
+.login-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(62,207,142,.08) 0%,transparent 60%);pointer-events:none}
+.login-card{background:var(--d3);border:1px solid rgba(62,207,142,.2);border-radius:16px;padding:clamp(32px,5vw,52px);width:100%;max-width:400px;position:relative;z-index:1}
+.login-card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:0 0 2px 2px}
+.login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:5px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:4px}
+.login-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--w4);text-align:center;margin-bottom:32px}
+.login-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;text-align:center;margin-bottom:6px}
+.login-desc{font-size:13px;color:var(--w3);text-align:center;margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--w3);margin-bottom:7px;font-weight:500}
+.field input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all .25s}
+.field input::placeholder{color:var(--w4)}
+.field input:focus{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04);box-shadow:0 0 0 3px rgba(62,207,142,.08)}
+.login-err{color:var(--red);font-size:12px;text-align:center;margin-bottom:12px;display:none}
+.btn-green{width:100%;background:var(--g);color:#000;border:none;padding:14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(62,207,142,.2)}
+.btn-green:hover{background:#2db87a;transform:translateY(-1px)}
+
+/* APP */
+.app{display:none;min-height:100vh}
+
+/* NAV */
+.nav{background:rgba(7,8,10,.97);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);height:60px}
+.nav-left{display:flex;align-items:center;gap:16px}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-badge{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--w4);background:var(--d4);border:1px solid var(--border);padding:4px 10px;border-radius:100px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-user{font-size:12px;color:var(--w3)}
+.logout-btn{background:none;border:1px solid var(--border);color:var(--w3);padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.logout-btn:hover{border-color:rgba(255,255,255,.15);color:var(--w)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--d2);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar-section{margin-bottom:24px}
+.sidebar-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--w4);padding:0 20px;margin-bottom:8px;font-weight:600}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;transition:all .2s;font-size:13px;color:var(--w3);border-left:2px solid transparent}
+.sidebar-item:hover{color:var(--w);background:rgba(255,255,255,.03)}
+.sidebar-item.active{color:var(--g);border-left-color:var(--g);background:rgba(62,207,142,.06)}
+.sidebar-icon{font-size:16px;width:20px;text-align:center}
+
+/* MAIN */
+.main-content{flex:1;padding:28px 24px;overflow-x:hidden}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--w3);margin-bottom:28px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-box{background:var(--d3);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-box.green::before{background:var(--g)}
+.stat-box.gold::before{background:var(--gold)}
+.stat-box.red::before{background:var(--red)}
+.stat-box.blue::before{background:var(--blue)}
+.stat-icon{font-size:20px;margin-bottom:10px}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:800;line-height:1;margin-bottom:4px}
+.stat-box.green .stat-num{color:var(--g)}
+.stat-box.gold .stat-num{color:var(--gold)}
+.stat-box.red .stat-num{color:var(--red)}
+.stat-box.blue .stat-num{color:var(--blue)}
+.stat-lbl{font-size:11px;color:var(--w3);text-transform:uppercase;letter-spacing:1px}
+
+/* CARDS */
+.card{background:var(--d3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w4);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+td{font-size:13px;color:var(--w2);padding:11px 16px;border-bottom:1px solid var(--border2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-green{background:rgba(62,207,142,.1);color:var(--g);border:1px solid rgba(62,207,142,.2)}
+.badge-red{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.badge-gold{background:rgba(212,175,55,.1);color:var(--gold);border:1px solid rgba(212,175,55,.2)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* BUTTONS */
+.btn-sm{padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-sm-green{background:var(--g);color:#000}
+.btn-sm-green:hover{background:#2db87a}
+.btn-sm-outline{background:none;color:var(--w3);border:1px solid var(--border)}
+.btn-sm-outline:hover{border-color:rgba(255,255,255,.15);color:var(--w)}
+
+/* RESTAURANT CARDS */
+.rest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.rest-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .3s;position:relative;overflow:hidden}
+.rest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold))}
+.rest-card:hover{border-color:rgba(62,207,142,.2)}
+.rest-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
+.rest-id{font-size:11px;color:var(--w4);letter-spacing:1px;margin-bottom:16px}
+.rest-actions{display:flex;flex-wrap:wrap;gap:8px}
+.rest-link{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--w3);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:6px 10px;cursor:pointer;transition:all .2s;text-decoration:none}
+.rest-link:hover{color:var(--g);border-color:rgba(62,207,142,.2)}
+
+/* ADD FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-field{margin-bottom:0}
+.form-field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--w3);margin-bottom:7px;font-weight:500}
+.form-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 14px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:all .25s}
+.form-field input::placeholder{color:var(--w4)}
+.form-field input:focus{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04)}
+.form-actions{display:flex;gap:10px;margin-top:20px}
+
+/* GENERATED LINKS */
+.link-box{background:var(--d4);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.link-label{font-size:13px;font-weight:600;margin-bottom:3px}
+.link-url{font-size:11px;color:var(--w4);word-break:break-all}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 24px;color:var(--w4);font-size:14px}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* LOADING */
+.loading{text-align:center;padding:48px;color:var(--w4)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--g);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .main-content{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-logo">REFILL</div>
+    <div class="login-sub">Admin Panel</div>
+    <h2 class="login-title">Welcome back.</h2>
+    <p class="login-desc">Sign in to manage all your restaurants.</p>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••">
+    </div>
+    <p class="login-err" id="login-err">Incorrect username or password</p>
+    <button class="btn-green" onclick="doLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+  <div class="nav">
+    <div class="nav-left">
+      <div class="nav-logo">REFILL</div>
+      <div class="nav-badge">Admin Panel</div>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user">👤 Admin</span>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Menu</div>
+        <div class="sidebar-item active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span>Overview</div>
+        <div class="sidebar-item" onclick="showPage('restaurants',this)"><span class="sidebar-icon">🏪</span>Restaurants</div>
+        <div class="sidebar-item" onclick="showPage('leads',this)"><span class="sidebar-icon">🔥</span>Leads</div>
+        <div class="sidebar-item" onclick="showPage('add',this)"><span class="sidebar-icon">➕</span>Add Restaurant</div>
+      </div>
+    </div>
+
+    <div class="main-content">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <h1 class="page-title">Overview</h1>
+        <p class="page-sub">All restaurants and key metrics at a glance.</p>
+        <div class="stats-row">
+          <div class="stat-box green"><div class="stat-icon">🏪</div><div class="stat-num" id="ov-restaurants">—</div><div class="stat-lbl">Restaurants</div></div>
+          <div class="stat-box gold"><div class="stat-icon">👥</div><div class="stat-num" id="ov-customers">—</div><div class="stat-lbl">Total Customers</div></div>
+          <div class="stat-box red"><div class="stat-icon">🔴</div><div class="stat-num" id="ov-cold">—</div><div class="stat-lbl">Cold Customers</div></div>
+          <div class="stat-box blue"><div class="stat-icon">🔥</div><div class="stat-num" id="ov-leads">—</div><div class="stat-lbl">New Leads</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏪 All Restaurants</div>
+            <button class="btn-sm btn-sm-green" onclick="showPage('add',document.querySelectorAll('.sidebar-item')[3])">+ Add New</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>ID</th><th>Owner</th><th>Cold Days</th><th>Date Added</th><th>Links</th></tr></thead>
+              <tbody id="ov-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESTAURANTS -->
+      <div class="page" id="page-restaurants">
+        <h1 class="page-title">Restaurants</h1>
+        <p class="page-sub">All onboarded restaurants with quick access links.</p>
+        <div class="rest-grid" id="rest-grid"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+
+      <!-- LEADS -->
+      <div class="page" id="page-leads">
+        <h1 class="page-title">Leads</h1>
+        <p class="page-sub">Restaurant owners who expressed interest from your website.</p>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🔥 All Leads</div>
+            <div id="leads-count" style="font-size:12px;color:var(--w3)">Loading...</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Restaurant</th><th>Phone</th><th>Plan</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="leads-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD RESTAURANT -->
+      <div class="page" id="page-add">
+        <h1 class="page-title">Add Restaurant</h1>
+        <p class="page-sub">Onboard a new restaurant to Refill. Fill in all details below.</p>
+        <div class="card">
+          <div class="card-header"><div class="card-title">➕ New Restaurant Details</div></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Restaurant ID * (no spaces, lowercase)</label>
+                <input type="text" id="add-id" placeholder="e.g. brandas">
+              </div>
+              <div class="form-field">
+                <label>Restaurant Name *</label>
+                <input type="text" id="add-name" placeholder="e.g. Brandas Food">
+              </div>
+              <div class="form-field">
+                <label>Owner Name *</label>
+                <input type="text" id="add-owner" placeholder="e.g. Chidi Okafor">
+              </div>
+              <div class="form-field">
+                <label>WhatsApp Number *</label>
+                <input type="tel" id="add-phone" placeholder="e.g. 2348012345678">
+              </div>
+              <div class="form-field">
+                <label>Green API Instance ID *</label>
+                <input type="text" id="add-instance" placeholder="e.g. 7107596960">
+              </div>
+              <div class="form-field">
+                <label>Green API Token *</label>
+                <input type="text" id="add-token" placeholder="Paste token here">
+              </div>
+              <div class="form-field">
+                <label>Cold Days Threshold</label>
+                <input type="number" id="add-cold" placeholder="30" value="30">
+              </div>
+            </div>
+            <p id="add-err" style="color:var(--red);font-size:12px;margin-top:12px;display:none">Please fill in all required fields</p>
+            <p id="add-success" style="color:var(--g);font-size:12px;margin-top:12px;display:none">✅ Restaurant added successfully!</p>
+            <div class="form-actions">
+              <button class="btn-sm btn-sm-green" style="padding:11px 24px;font-size:13px" onclick="addRestaurant()">Add Restaurant →</button>
+              <button class="btn-sm btn-sm-outline" style="padding:11px 24px;font-size:13px" onclick="clearForm()">Clear</button>
+            </div>
+            <div id="generated-links" style="display:none;margin-top:28px">
+              <div style="height:1px;background:var(--border);margin-bottom:20px"></div>
+              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;color:var(--g)">✅ Share These Links With The Restaurant</div>
+              <div id="links-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'refill2026';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwebL9ZOkGwnzlXRJgp5Y6CaukjFnWlfbUAcEacecD7qgG3jjjaGfSMnQXmOW3AFdF1/exec';
+var SHEET_ID = '1b0-FpqArRYBMhkaNdSxz-jro1hhqETq2Q-jOmYDfKm4';
+var BASE_URL = 'https://logical46.github.io/Refill-/';
+var restaurants = [];
+var leads = [];
+
+// LOGIN
+function doLogin() {
+  var u = document.getElementById('login-user').value.trim();
+  var p = document.getElementById('login-pass').value.trim();
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('login-wrap').style.display !== 'none') doLogin();
+});
+
+// NAVIGATION
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-item').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('page-' + page).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// LOAD DATA
+function loadAll() {
+  loadRestaurants();
+  loadLeads();
+}
+
+function csvUrl(gid) {
+  return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + gid + '&t=' + Date.now();
+}
+
+function loadRestaurants() {
+  fetch(csvUrl(0))
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      restaurants = parseCSV(csv);
+      renderOverview();
+      renderRestaurants();
+    })
+    .catch(function() {
+      restaurants = [];
+      renderOverview();
+      renderRestaurants();
+    });
+}
+
+function loadLeads() {
+  fetch(csvUrl(2))
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      leads = parseCSV(csv);
+      renderLeads();
+      document.getElementById('ov-leads').textContent = leads.length;
+    })
+    .catch(function() {
+      leads = [];
+      renderLeads();
+    });
+}
+
+function parseCSV(csv) {
+  var lines = csv.trim().split('\n');
+  var result = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = splitCSV(lines[i]);
+    if (!cols[0] || cols[0].trim() === '') continue;
+    result.push(cols.map(function(c) { return c.trim().replace(/^"|"$/g,''); }));
+  }
+  return result;
+}
+
+function splitCSV(line) {
+  var result = [], cur = '', inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; }
+    else if (line[i] === ',' && !inQ) { result.push(cur); cur = ''; }
+    else { cur += line[i]; }
+  }
+  result.push(cur);
+  return result;
+}
+
+function formatDate(str) {
+  if (!str) return '—';
+  var d = new Date(str);
+  if (isNaN(d)) return str;
+  return d.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// RENDER OVERVIEW
+function renderOverview() {
+  document.getElementById('ov-restaurants').textContent = restaurants.length;
+  var html = '';
+  if (restaurants.length === 0) {
+    html = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏪</div>No restaurants yet.</div></td></tr>';
+  } else {
+    restaurants.forEach(function(r) {
+      html += '<tr>' +
+        '<td><strong>' + (r[1]||'—') + '</strong></td>' +
+        '<td><span class="badge badge-gold">' + (r[0]||'—') + '</span></td>' +
+        '<td style="color:var(--w3)">' + (r[2]||'—') + '</td>' +
+        '<td style="color:var(--w3)">' + (r[6]||'30') + ' days</td>' +
+        '<td style="color:var(--w3)">' + formatDate(r[7]) + '</td>' +
+        '<td style="display:flex;gap:6px;flex-wrap:wrap">' +
+        '<a class="rest-link" href="' + BASE_URL + 'checkin.html" target="_blank">📍 Check-in</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'dashboard.html" target="_blank">📊 Dashboard</a>' +
+        '</td></tr>';
+    });
+  }
+  document.getElementById('ov-table').innerHTML = html;
+  document.getElementById('ov-customers').textContent = '—';
+  document.getElementById('ov-cold').textContent = '—';
+}
+
+// RENDER RESTAURANTS
+function renderRestaurants() {
+  var html = '';
+  if (restaurants.length === 0) {
+    html = '<div class="empty"><div class="empty-icon">🏪</div>No restaurants yet.<br>Add your first restaurant to get started.</div>';
+  } else {
+    restaurants.forEach(function(r) {
+      var id = r[0] || '';
+      var name = r[1] || '';
+      var owner = r[2] || '';
+      html += '<div class="rest-card">' +
+        '<div class="rest-name">' + name + '</div>' +
+        '<div class="rest-id">ID: ' + id + ' &nbsp;|&nbsp; Owner: ' + owner + '</div>' +
+        '<div class="rest-actions">' +
+        '<a class="rest-link" href="' + BASE_URL + 'index.html" target="_blank">📋 Signup Form</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'checkin.html" target="_blank">📍 Check-in</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'dashboard.html" target="_blank">📊 Dashboard</a>' +
+        '</div></div>';
+    });
+  }
+  document.getElementById('rest-grid').innerHTML = html;
+}
+
+// RENDER LEADS
+function renderLeads() {
+  document.getElementById('leads-count').textContent = leads.length + ' total leads';
+  var html = '';
+  if (leads.length === 0) {
+    html = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">🔥</div>No leads yet. Share your website to get leads.</div></td></tr>';
+  } else {
+    leads.slice().reverse().forEach(function(l) {
+      html += '<tr>' +
+        '<td><strong>' + (l[0]||'—') + '</strong></td>' +
+        '<td>' + (l[1]||'—') + '</td>' +
+        '<td style="color:var(--w3)">' + (l[2]||'—') + '</td>' +
+        '<td><span class="badge badge-gold">' + (l[3]||'—') + '</span></td>' +
+        '<td style="color:var(--w3)">' + formatDate(l[4]) + '</td>' +
+        '<td><span class="badge badge-green"><span class="badge-dot"></span>' + (l[5]||'New') + '</span></td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('leads-table').innerHTML = html;
+}
+
+// ADD RESTAURANT
+function addRestaurant() {
+  var id       = document.getElementById('add-id').value.trim().toLowerCase().replace(/\s/g,'');
+  var name     = document.getElementById('add-name').value.trim();
+  var owner    = document.getElementById('add-owner').value.trim();
+  var phone    = document.getElementById('add-phone').value.trim();
+  var instance = document.getElementById('add-instance').value.trim();
+  var token    = document.getElementById('add-token').value.trim();
+  var cold     = document.getElementById('add-cold').value.trim() || '30';
+
+  document.getElementById('add-err').style.display = 'none';
+  document.getElementById('add-success').style.display = 'none';
+
+  if (!id || !name || !owner || !phone || !instance || !token) {
+    document.getElementById('add-err').style.display = 'block';
+    return;
+  }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', SCRIPT_URL, true);
+  xhr.setRequestHeader('Content-Type', 'text/plain');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      document.getElementById('add-success').style.display = 'block';
+      showLinks(id, name);
+      setTimeout(loadAll, 2000);
+    }
+  };
+  xhr.onerror = function() {
+    document.getElementById('add-success').style.display = 'block';
+    showLinks(id, name);
+  };
+  xhr.send(JSON.stringify({
+    type:'addRestaurant', id:id, name:name, owner:owner,
+    phone:phone, instance:instance, token:token, coldDays:cold
+  }));
+}
+
+function showLinks(id, name) {
+  var links = [
+    { label:'📋 Customer Signup Form', url: BASE_URL + 'index.html' },
+    { label:'📍 Staff Check-In Page',  url: BASE_URL + 'checkin.html' },
+    { label:'📊 Restaurant Dashboard', url: BASE_URL + 'dashboard.html' }
+  ];
+  var html = links.map(function(l) {
+    return '<div class="link-box">' +
+      '<div><div class="link-label">' + l.label + '</div>' +
+      '<div class="link-url">' + l.url + '</div></div>' +
+      '<button class="btn-sm btn-sm-outline" onclick="copyLink(\'' + l.url + '\',this)">Copy</button>' +
+      '</div>';
+  }).join('');
+  document.getElementById('links-list').innerHTML = html;
+  document.getElementById('generated-links').style.display = 'block';
+}
+
+function copyLink(url, btn) {
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+  });
+}
+
+function clearForm() {
+  ['add-id','add-name','add-owner','add-phone','add-instance','add-token'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('add-cold').value = '30';
+  document.getElementById('add-err').style.display = 'none';
+  document.getElementById('add-success').style.display = 'none';
+  document.getElementById('generated-links').style.display = 'none';
+}
+</script>
+</body>
+</html>
