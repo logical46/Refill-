@@ -281,7 +281,7 @@ function loadRestaurant() {
 
   formData.restaurantId = id;
 
-  var url = 'https://docs.google.com/spreadsheets/d/' + MASTER_SHEET_ID + '/export?format=csv&gid=0&t=' + Date.now();
+  var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp6iuAs0sH6_8RDwN4CE_mZOJZbZ0KS_7xyC1UnSNhHvB9e95jHM7V7W73mDbC2zEc_7iS9bitEdV/pub?gid=0&single=true&output=csv&t=' + Date.now();
 
   fetch(url)
     .then(function(r) { return r.text(); })
