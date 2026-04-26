@@ -741,6 +741,26 @@ img{display:block;max-width:100%}
           <option value="Not sure">Not sure yet</option>
         </select>
       </div>
+      <div class="field">
+        <label>Your Menu Items (select all that apply)</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px" id="menu-grid">
+          <div class="menu-item" onclick="toggleMenu(this,'🍛:Rice Dishes')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🍛</span> Rice Dishes</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🥩:Grilled Meats')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🥩</span> Grilled Meats</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🍗:Chicken')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🍗</span> Chicken</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🌮:Snacks & Sides')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🌮</span> Snacks & Sides</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🦐:Seafood')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🦐</span> Seafood</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🥤:Drinks & Combos')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🥤</span> Drinks & Combos</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🍝:Pasta & Noodles')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🍝</span> Pasta & Noodles</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🥗:Salads & Healthy')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🥗</span> Salads & Healthy</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🍕:Pizza & Fast Food')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🍕</span> Pizza & Fast Food</div>
+          <div class="menu-item" onclick="toggleMenu(this,'🍰:Desserts & Cakes')" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--w3)"><span>🍰</span> Desserts & Cakes</div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <input type="text" id="custom-menu-input" placeholder="Add custom item e.g. 🍲:Pepper Soup" style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;color:var(--w);font-family:'Inter',sans-serif;font-size:13px;outline:none">
+          <button onclick="addCustomMenu()" style="background:var(--g);color:#000;border:none;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap">+ Add</button>
+        </div>
+        <div style="font-size:11px;color:var(--w4);margin-top:6px">Format: emoji:Name — e.g. 🍲:Pepper Soup</div>
+      </div>
       <p class="m-err" id="m-err">Please fill in all fields to continue.</p>
       <button class="m-submit" id="m-btn" onclick="submitLead()">Submit — We'll Contact You on WhatsApp</button>
       <p class="m-note">No spam. No unsolicited calls. Just a direct conversation about your restaurant.</p>
@@ -792,6 +812,43 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
 
+// MENU SELECTOR
+var selectedMenuItems = [];
+
+function toggleMenu(el, value) {
+  var idx = selectedMenuItems.indexOf(value);
+  if (idx > -1) {
+    selectedMenuItems.splice(idx, 1);
+    el.style.background = 'rgba(255,255,255,.04)';
+    el.style.borderColor = 'rgba(255,255,255,.08)';
+    el.style.color = 'var(--w3)';
+  } else {
+    selectedMenuItems.push(value);
+    el.style.background = 'rgba(62,207,142,.1)';
+    el.style.borderColor = 'rgba(62,207,142,.3)';
+    el.style.color = '#fff';
+  }
+}
+
+function addCustomMenu() {
+  var input = document.getElementById('custom-menu-input');
+  var val = input.value.trim();
+  if (!val) return;
+  if (selectedMenuItems.indexOf(val) === -1) {
+    selectedMenuItems.push(val);
+  }
+  // Add visual tag
+  var grid = document.getElementById('menu-grid');
+  var el = document.createElement('div');
+  el.className = 'menu-item';
+  el.style.cssText = 'background:rgba(62,207,142,.1);border:1px solid rgba(62,207,142,.3);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;font-size:13px;color:#fff';
+  el.innerHTML = val;
+  var itemVal = val;
+  el.onclick = function() { toggleMenu(el, itemVal); };
+  grid.appendChild(el);
+  input.value = '';
+}
+
 // SUBMIT
 function setColor(hex) {
   document.getElementById('f-color').value = hex;
@@ -804,6 +861,7 @@ function submitLead() {
   var phone      = document.getElementById('f-phone').value.trim();
   var color      = document.getElementById('f-color').value || '#D4AF37';
   var plan       = document.getElementById('f-plan').value;
+  var menu       = selectedMenuItems.length > 0 ? selectedMenuItems.join('|') : '🍛:Rice Dishes|🥩:Grilled Meats|🍗:Chicken|🌮:Snacks & Sides|🦐:Seafood|🥤:Drinks & Combos';
 
   if (!name || !restaurant || !phone || !plan) {
     document.getElementById('m-err').style.display = 'block';
@@ -833,6 +891,7 @@ function submitLead() {
     phone:      phone,
     color:      color,
     plan:       plan,
+    menu:       menu,
     date:       new Date().toISOString()
   }));
 }
