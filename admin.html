@@ -359,7 +359,12 @@ function loadAll() {
   loadLeads();
 }
 
+var RESTAURANTS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp6iuAs0sH6_8RDwN4CE_mZOJZbZ0KS_7xyC1UnSNhHvB9e95jHM7V7W73mDbC2zEc_7iS9bitEdV/pub?gid=0&single=true&output=csv';
+
 function csvUrl(gid) {
+  if (gid === 0) {
+    return RESTAURANTS_CSV + '&t=' + Date.now();
+  }
   return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + gid + '&t=' + Date.now();
 }
 
