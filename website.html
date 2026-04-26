@@ -700,18 +700,36 @@ img{display:block;max-width:100%}
     <div id="m-form">
       <div class="modal-label">Get Started</div>
       <h3 class="modal-title">Let's get your restaurant set up.</h3>
-      <p class="modal-sub">Fill in your details below — we will contact you on WhatsApp within 24 hours to begin onboarding.</p>
+      <p class="modal-sub">Fill in your details — your signup form and dashboard will be created automatically.</p>
       <div class="field">
         <label>Your Name</label>
         <input type="text" id="f-name" placeholder="e.g. Adaeze Okonkwo" autocomplete="off">
       </div>
       <div class="field">
         <label>Restaurant Name</label>
-        <input type="text" id="f-restaurant" placeholder="e.g. Mama's Kitchen Lekki" autocomplete="off">
+        <input type="text" id="f-restaurant" placeholder="e.g. Mama's Kitchen" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Restaurant Tagline</label>
+        <input type="text" id="f-tagline" placeholder="e.g. Best Grills in Lagos" autocomplete="off">
       </div>
       <div class="field">
         <label>WhatsApp Number</label>
         <input type="tel" id="f-phone" placeholder="e.g. 08012345678">
+      </div>
+      <div class="field">
+        <label>Brand Color (pick your restaurant color)</label>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
+          <input type="color" id="f-color" value="#D4AF37" style="width:48px;height:48px;border:2px solid rgba(255,255,255,.1);border-radius:8px;background:none;cursor:pointer;padding:2px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <div onclick="setColor('#D4AF37')" style="width:32px;height:32px;border-radius:50%;background:#D4AF37;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+            <div onclick="setColor('#FF6B35')" style="width:32px;height:32px;border-radius:50%;background:#FF6B35;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+            <div onclick="setColor('#52B788')" style="width:32px;height:32px;border-radius:50%;background:#52B788;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+            <div onclick="setColor('#4A90E2')" style="width:32px;height:32px;border-radius:50%;background:#4A90E2;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+            <div onclick="setColor('#E74C3C')" style="width:32px;height:32px;border-radius:50%;background:#E74C3C;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+            <div onclick="setColor('#9B59B6')" style="width:32px;height:32px;border-radius:50%;background:#9B59B6;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+          </div>
+        </div>
       </div>
       <div class="field">
         <label>Plan You're Interested In</label>
@@ -775,11 +793,17 @@ document.addEventListener('keydown', function(e) {
 });
 
 // SUBMIT
+function setColor(hex) {
+  document.getElementById('f-color').value = hex;
+}
+
 function submitLead() {
-  var name = document.getElementById('f-name').value.trim();
+  var name       = document.getElementById('f-name').value.trim();
   var restaurant = document.getElementById('f-restaurant').value.trim();
-  var phone = document.getElementById('f-phone').value.trim();
-  var plan = document.getElementById('f-plan').value;
+  var tagline    = document.getElementById('f-tagline').value.trim() || 'Food & Dining';
+  var phone      = document.getElementById('f-phone').value.trim();
+  var color      = document.getElementById('f-color').value || '#D4AF37';
+  var plan       = document.getElementById('f-plan').value;
 
   if (!name || !restaurant || !phone || !plan) {
     document.getElementById('m-err').style.display = 'block';
@@ -802,7 +826,15 @@ function submitLead() {
   xhr.onerror = function() {
     showSuccess(name, restaurant);
   };
-  xhr.send(JSON.stringify({ name: name, restaurant: restaurant, phone: phone, plan: plan, date: new Date().toISOString() }));
+  xhr.send(JSON.stringify({
+    name:       name,
+    restaurant: restaurant,
+    tagline:    tagline,
+    phone:      phone,
+    color:      color,
+    plan:       plan,
+    date:       new Date().toISOString()
+  }));
 }
 
 function showSuccess(name, restaurant) {
