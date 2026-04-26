@@ -3,869 +3,569 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Refill — Turn Lost Customers Into Repeat Revenue</title>
-<meta name="description" content="Refill automatically detects when restaurant customers go quiet and sends personalised WhatsApp messages to bring them back. Built for Nigerian restaurants.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Refill — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --g:#3ECF8E;--gd:#25a36e;--g2:rgba(62,207,142,.12);
-  --gold:#C9A84C;--gold2:rgba(201,168,76,.1);
+  --g:#3ECF8E;--gd:#25a36e;--g2:rgba(62,207,142,.1);
+  --gold:#D4AF37;--gold2:rgba(212,175,55,.1);
   --d:#07080A;--d2:#0D0F12;--d3:#13161A;--d4:#1A1E24;
   --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.04);
-  --w:#FFFFFF;--w2:#E8EAF0;--w3:#9BA3AF;--w4:#5C6370;
-  --r:#FF4757;
+  --w:#fff;--w2:#E8EAF0;--w3:#9BA3AF;--w4:#5C6370;
+  --red:#FF4444;--blue:#4A90E2;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
-body{background:var(--d);color:var(--w);font-family:'Inter',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:var(--g);color:#000}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
+html{scroll-behavior:smooth}
+body{background:var(--d);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ─── UTILITY ─── */
-.container{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
-.tag{display:inline-flex;align-items:center;gap:7px;background:var(--g2);border:1px solid rgba(62,207,142,.25);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--g)}
-.tag-dot{width:5px;height:5px;background:var(--g);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
-.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--g);font-weight:600;margin-bottom:14px}
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-
-/* ─── NAV ─── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:900;transition:all .3s}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;max-width:1120px;margin:0 auto}
-.nav.scrolled{background:rgba(7,8,10,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{font-size:13px;color:var(--w3);letter-spacing:.3px;transition:color .2s}
-.nav-links a:hover{color:var(--w)}
-.nav-cta{background:var(--g);color:#000;border:none;padding:10px 22px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
-.nav-cta:hover{background:#2db87a;transform:translateY(-1px);box-shadow:0 6px 20px rgba(62,207,142,.3)}
-
-/* ─── HERO ─── */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(62,207,142,.13) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(201,168,76,.06) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 10% 90%,rgba(62,207,142,.05) 0%,transparent 55%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 50% at 50% 0%,#000 30%,transparent 80%)}
-.hero>*{position:relative;z-index:1}
-.hero .tag{margin-bottom:32px;animation:fadeUp .8s ease both}
-.hero-title{font-family:'Syne',sans-serif;font-size:clamp(40px,6.5vw,80px);font-weight:800;line-height:1;letter-spacing:-2.5px;margin-bottom:24px;animation:fadeUp .8s .1s ease both}
-.hero-title em{font-style:normal;background:linear-gradient(135deg,var(--g) 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:clamp(15px,2vw,18px);color:var(--w3);max-width:560px;line-height:1.75;margin-bottom:40px;font-weight:300;animation:fadeUp .8s .2s ease both}
-.hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;animation:fadeUp .8s .3s ease both}
-.btn-primary{background:var(--g);color:#000;border:none;padding:15px 32px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(62,207,142,.25)}
-.btn-primary:hover{background:#2db87a;transform:translateY(-2px);box-shadow:0 12px 40px rgba(62,207,142,.4)}
-.btn-outline{background:none;color:var(--w2);border:1px solid var(--border);padding:15px 32px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .25s}
-.btn-outline:hover{border-color:rgba(255,255,255,.2);color:var(--w);background:rgba(255,255,255,.04)}
-.hero-proof{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px;margin-top:56px;padding-top:56px;border-top:1px solid var(--border);animation:fadeUp .8s .4s ease both}
-.proof-item{text-align:center}
-.proof-num{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,36px);font-weight:800;background:linear-gradient(135deg,var(--w),var(--w3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.proof-label{font-size:11px;color:var(--w4);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
-.proof-divider{width:1px;height:40px;background:var(--border)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ─── PROBLEM ─── */
-.problem-section{padding:clamp(80px,10vw,120px) 24px;background:var(--d2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
-.problem-text .section-label{margin-bottom:20px}
-.problem-headline{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
-.problem-headline span{color:var(--r)}
-.problem-body{font-size:15px;color:var(--w3);line-height:1.8;margin-bottom:16px}
-.problem-cards{display:flex;flex-direction:column;gap:12px}
-.problem-card{background:var(--d3);border:1px solid var(--border);border-radius:10px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px}
-.problem-card-icon{font-size:20px;flex-shrink:0;margin-top:2px}
-.problem-card-text{font-size:14px;color:var(--w3);line-height:1.6}
-.problem-card-text strong{color:var(--w);display:block;margin-bottom:3px;font-size:14px}
-
-/* ─── SOLUTION ─── */
-.solution-section{padding:clamp(80px,10vw,120px) 24px}
-.solution-inner{text-align:center;max-width:700px;margin:0 auto 64px}
-.solution-inner .section-label{margin-bottom:20px}
-.solution-headline{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,50px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:20px}
-.solution-sub{font-size:16px;color:var(--w3);line-height:1.75;font-weight:300}
-.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.how-step{background:var(--d2);padding:clamp(24px,3vw,40px) clamp(18px,2vw,28px);position:relative;transition:background .3s}
-.how-step:hover{background:var(--d3)}
-.how-step::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));opacity:0;transition:opacity .3s}
-.how-step:hover::after{opacity:1}
-.step-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--g);text-transform:uppercase;margin-bottom:16px}
-.step-icon{font-size:28px;margin-bottom:14px}
-.step-title{font-family:'Syne',sans-serif;font-size:clamp(14px,1.5vw,17px);font-weight:700;margin-bottom:10px;line-height:1.2}
-.step-desc{font-size:13px;color:var(--w3);line-height:1.7}
-
-/* ─── FEATURES ─── */
-.features-section{padding:clamp(80px,10vw,120px) 24px;background:var(--d2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.features-header{text-align:center;max-width:600px;margin:0 auto 56px}
-.features-header .section-label{margin-bottom:20px}
-.features-header h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
-.features-header p{font-size:15px;color:var(--w3);line-height:1.75}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.feat-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:clamp(22px,3vw,32px);transition:all .3s;position:relative;overflow:hidden}
-.feat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 0% 0%,var(--g2),transparent 60%);opacity:0;transition:opacity .3s}
-.feat-card:hover{border-color:rgba(62,207,142,.2);transform:translateY(-3px)}
-.feat-card:hover::before{opacity:1}
-.feat-card.gold-feat::before{background:radial-gradient(ellipse 80% 60% at 0% 0%,var(--gold2),transparent 60%)}
-.feat-card.gold-feat:hover{border-color:rgba(201,168,76,.2)}
-.feat-icon-wrap{width:44px;height:44px;border-radius:10px;background:var(--g2);border:1px solid rgba(62,207,142,.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px;position:relative;z-index:1}
-.feat-card.gold-feat .feat-icon-wrap{background:var(--gold2);border-color:rgba(201,168,76,.2)}
-.feat-title{font-family:'Syne',sans-serif;font-size:clamp(14px,1.5vw,16px);font-weight:700;margin-bottom:10px;position:relative;z-index:1}
-.feat-desc{font-size:13px;color:var(--w3);line-height:1.7;position:relative;z-index:1}
-
-/* ─── OUTCOMES ─── */
-.outcomes-section{padding:clamp(80px,10vw,120px) 24px}
-.outcomes-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
-.outcomes-text .section-label{margin-bottom:20px}
-.outcomes-headline{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:20px}
-.outcomes-sub{font-size:15px;color:var(--w3);line-height:1.8;margin-bottom:32px}
-.outcomes-list{display:flex;flex-direction:column;gap:14px}
-.outcome-item{display:flex;align-items:flex-start;gap:14px}
-.outcome-check{width:22px;height:22px;border-radius:50%;background:var(--g2);border:1px solid rgba(62,207,142,.3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px;color:var(--g)}
-.outcome-text{font-size:14px;color:var(--w2);line-height:1.6}
-.outcome-text strong{color:var(--w);font-weight:600}
-.outcomes-visual{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.outcome-stat-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:24px 20px;text-align:center}
-.outcome-stat-card.full{grid-column:1/-1;background:linear-gradient(135deg,rgba(62,207,142,.08),rgba(201,168,76,.06));border-color:rgba(62,207,142,.15)}
-.outcome-stat-num{font-family:'Syne',sans-serif;font-size:clamp(28px,3vw,40px);font-weight:800;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:6px}
-.outcome-stat-label{font-size:12px;color:var(--w3);line-height:1.5}
-
-/* ─── WHY REFILL ─── */
-.why-section{padding:clamp(80px,10vw,120px) 24px;background:var(--d2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.why-header{text-align:center;max-width:600px;margin:0 auto 56px}
-.why-header .section-label{margin-bottom:20px}
-.why-header h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
-.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.why-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:clamp(22px,3vw,32px)}
-.why-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--border);line-height:1;margin-bottom:16px}
-.why-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:10px}
-.why-desc{font-size:13px;color:var(--w3);line-height:1.7}
-
-/* ─── PRICING ─── */
-.pricing-section{padding:clamp(80px,10vw,120px) 24px}
-.pricing-header{text-align:center;max-width:580px;margin:0 auto 56px}
-.pricing-header .section-label{margin-bottom:20px}
-.pricing-header h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:16px}
-.pricing-header p{font-size:15px;color:var(--w3);line-height:1.75}
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
-.price-card{background:var(--d3);border:1px solid var(--border);border-radius:16px;padding:clamp(24px,3vw,36px);position:relative;transition:border-color .3s}
-.price-card:hover{border-color:rgba(255,255,255,.12)}
-.price-card.featured{background:linear-gradient(160deg,rgba(62,207,142,.08) 0%,var(--d3) 60%);border-color:rgba(62,207,142,.3)}
-.price-card.featured:hover{border-color:rgba(62,207,142,.5)}
-.price-badge{display:inline-block;background:var(--g);color:#000;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:100px;margin-bottom:20px;font-family:'Inter',sans-serif}
-.price-plan{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--w3);font-weight:600;margin-bottom:8px}
-.price-amount{font-family:'Syne',sans-serif;font-size:clamp(30px,3.5vw,42px);font-weight:800;line-height:1;margin-bottom:4px}
-.price-amount sub{font-size:14px;font-weight:400;color:var(--w3);font-family:'Inter',sans-serif}
-.price-setup{font-size:12px;color:var(--w4);margin-bottom:6px}
-.price-setup-note{font-size:11px;color:var(--w4);margin-bottom:24px;padding:8px 12px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid var(--border)}
-.price-divider{height:1px;background:var(--border);margin-bottom:24px}
-.price-features{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:10px}
-.price-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--w2);line-height:1.5}
-.price-features li::before{content:'✓';color:var(--g);font-weight:700;font-size:12px;flex-shrink:0;margin-top:1px}
-.price-btn{width:100%;padding:14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .25s}
-.price-btn-outline{background:none;color:var(--w);border:1px solid var(--border)}
-.price-btn-outline:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
-.price-btn-solid{background:var(--g);color:#000;border:none;box-shadow:0 8px 24px rgba(62,207,142,.25)}
-.price-btn-solid:hover{background:#2db87a;transform:translateY(-1px);box-shadow:0 12px 32px rgba(62,207,142,.4)}
-
-/* ─── FAQ ─── */
-.faq-section{padding:clamp(80px,10vw,120px) 24px;background:var(--d2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.faq-header{text-align:center;max-width:560px;margin:0 auto 56px}
-.faq-header .section-label{margin-bottom:20px}
-.faq-header h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);font-weight:800;line-height:1.1;letter-spacing:-1px}
-.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:900px;margin:0 auto}
-.faq-item{background:var(--d3);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.faq-q{width:100%;background:none;border:none;color:var(--w);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;text-align:left;padding:20px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;line-height:1.4;transition:color .2s}
-.faq-q:hover{color:var(--g)}
-.faq-icon{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--w3);flex-shrink:0;transition:all .3s}
-.faq-item.open .faq-icon{background:var(--g2);border-color:rgba(62,207,142,.3);color:var(--g);transform:rotate(45deg)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
-.faq-item.open .faq-a{max-height:300px}
-.faq-a-inner{padding:0 22px 20px;font-size:13px;color:var(--w3);line-height:1.75;border-top:1px solid var(--border2)}
-
-/* ─── FINAL CTA ─── */
-.cta-section{padding:clamp(80px,10vw,120px) 24px;position:relative;overflow:hidden}
-.cta-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(62,207,142,.09) 0%,transparent 65%)}
-.cta-inner{position:relative;z-index:1;text-align:center;max-width:640px;margin:0 auto}
-.cta-inner .section-label{margin-bottom:24px}
-.cta-headline{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,60px);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:20px}
-.cta-sub{font-size:16px;color:var(--w3);line-height:1.75;margin-bottom:48px;font-weight:300}
-
-/* ─── MODAL ─── */
-.overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
-.overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--d3);border:1px solid rgba(62,207,142,.2);border-radius:16px;padding:clamp(28px,4vw,44px);width:100%;max-width:440px;position:relative;transform:translateY(24px) scale(.98);transition:all .3s;max-height:90vh;overflow-y:auto}
-.overlay.open .modal{transform:translateY(0) scale(1)}
-.modal-top-bar{position:absolute;top:0;left:16px;right:16px;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:0 0 2px 2px}
-.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--w3);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.modal-close:hover{background:rgba(255,255,255,.1);color:var(--w)}
-.modal-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--g);font-weight:600;margin-bottom:12px}
-.modal-title{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,26px);font-weight:800;line-height:1.1;margin-bottom:8px}
-.modal-sub{font-size:13px;color:var(--w3);line-height:1.6;margin-bottom:28px}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w3);margin-bottom:7px;font-weight:500}
-.field input,.field select{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px;color:var(--w);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:all .25s;-webkit-appearance:none}
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--d);position:relative}
+.login-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(62,207,142,.08) 0%,transparent 60%);pointer-events:none}
+.login-card{background:var(--d3);border:1px solid rgba(62,207,142,.2);border-radius:16px;padding:clamp(32px,5vw,52px);width:100%;max-width:400px;position:relative;z-index:1}
+.login-card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:2px;background:linear-gradient(90deg,var(--g),var(--gold));border-radius:0 0 2px 2px}
+.login-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:5px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;margin-bottom:4px}
+.login-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--w4);text-align:center;margin-bottom:32px}
+.login-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;text-align:center;margin-bottom:6px}
+.login-desc{font-size:13px;color:var(--w3);text-align:center;margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--w3);margin-bottom:7px;font-weight:500}
+.field input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:13px 16px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all .25s}
 .field input::placeholder{color:var(--w4)}
-.field input:focus,.field select:focus{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04);box-shadow:0 0 0 3px rgba(62,207,142,.08)}
-.field select option{background:var(--d3)}
-.m-err{color:var(--r);font-size:12px;margin-bottom:12px;display:none}
-.m-submit{width:100%;background:var(--g);color:#000;border:none;padding:15px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(62,207,142,.2);margin-top:6px}
-.m-submit:hover{background:#2db87a;transform:translateY(-1px);box-shadow:0 12px 32px rgba(62,207,142,.35)}
-.m-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.m-note{font-size:11px;color:var(--w4);text-align:center;margin-top:12px}
-.m-success{display:none;text-align:center;padding:20px 0}
-.success-icon{font-size:52px;margin-bottom:16px;animation:pop .5s cubic-bezier(.16,1,.3,1)}
-@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
-.success-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:12px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.success-msg{font-size:14px;color:var(--w3);line-height:1.8}
-.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:spinning .6s linear infinite;vertical-align:middle;margin-left:6px}
-@keyframes spinning{to{transform:rotate(360deg)}}
+.field input:focus{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04);box-shadow:0 0 0 3px rgba(62,207,142,.08)}
+.login-err{color:var(--red);font-size:12px;text-align:center;margin-bottom:12px;display:none}
+.btn-green{width:100%;background:var(--g);color:#000;border:none;padding:14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;box-shadow:0 8px 24px rgba(62,207,142,.2)}
+.btn-green:hover{background:#2db87a;transform:translateY(-1px)}
 
-/* ─── FOOTER ─── */
-.footer{padding:40px 24px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;max-width:1120px;margin:0 auto}
-.footer-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.footer-text{font-size:12px;color:var(--w4)}
+/* APP */
+.app{display:none;min-height:100vh}
 
-/* ─── RESPONSIVE ─── */
+/* NAV */
+.nav{background:rgba(7,8,10,.97);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px);height:60px}
+.nav-left{display:flex;align-items:center;gap:16px}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:4px;background:linear-gradient(135deg,var(--g),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-badge{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--w4);background:var(--d4);border:1px solid var(--border);padding:4px 10px;border-radius:100px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-user{font-size:12px;color:var(--w3)}
+.logout-btn{background:none;border:1px solid var(--border);color:var(--w3);padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.logout-btn:hover{border-color:rgba(255,255,255,.15);color:var(--w)}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--d2);border-right:1px solid var(--border);padding:24px 0;flex-shrink:0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar-section{margin-bottom:24px}
+.sidebar-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--w4);padding:0 20px;margin-bottom:8px;font-weight:600}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;transition:all .2s;font-size:13px;color:var(--w3);border-left:2px solid transparent}
+.sidebar-item:hover{color:var(--w);background:rgba(255,255,255,.03)}
+.sidebar-item.active{color:var(--g);border-left-color:var(--g);background:rgba(62,207,142,.06)}
+.sidebar-icon{font-size:16px;width:20px;text-align:center}
+
+/* MAIN */
+.main-content{flex:1;padding:28px 24px;overflow-x:hidden}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:800;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--w3);margin-bottom:28px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-box{background:var(--d3);border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-box.green::before{background:var(--g)}
+.stat-box.gold::before{background:var(--gold)}
+.stat-box.red::before{background:var(--red)}
+.stat-box.blue::before{background:var(--blue)}
+.stat-icon{font-size:20px;margin-bottom:10px}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:800;line-height:1;margin-bottom:4px}
+.stat-box.green .stat-num{color:var(--g)}
+.stat-box.gold .stat-num{color:var(--gold)}
+.stat-box.red .stat-num{color:var(--red)}
+.stat-box.blue .stat-num{color:var(--blue)}
+.stat-lbl{font-size:11px;color:var(--w3);text-transform:uppercase;letter-spacing:1px}
+
+/* CARDS */
+.card{background:var(--d3);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+.card-body{padding:20px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--w4);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;font-weight:500}
+td{font-size:13px;color:var(--w2);padding:11px 16px;border-bottom:1px solid var(--border2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-green{background:rgba(62,207,142,.1);color:var(--g);border:1px solid rgba(62,207,142,.2)}
+.badge-red{background:rgba(255,68,68,.1);color:var(--red);border:1px solid rgba(255,68,68,.2)}
+.badge-gold{background:rgba(212,175,55,.1);color:var(--gold);border:1px solid rgba(212,175,55,.2)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* BUTTONS */
+.btn-sm{padding:7px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+.btn-sm-green{background:var(--g);color:#000}
+.btn-sm-green:hover{background:#2db87a}
+.btn-sm-outline{background:none;color:var(--w3);border:1px solid var(--border)}
+.btn-sm-outline:hover{border-color:rgba(255,255,255,.15);color:var(--w)}
+
+/* RESTAURANT CARDS */
+.rest-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:20px}
+.rest-card{background:var(--d3);border:1px solid var(--border);border-radius:12px;padding:20px;transition:border-color .3s;position:relative;overflow:hidden}
+.rest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--gold))}
+.rest-card:hover{border-color:rgba(62,207,142,.2)}
+.rest-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:4px}
+.rest-id{font-size:11px;color:var(--w4);letter-spacing:1px;margin-bottom:16px}
+.rest-actions{display:flex;flex-wrap:wrap;gap:8px}
+.rest-link{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--w3);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:6px 10px;cursor:pointer;transition:all .2s;text-decoration:none}
+.rest-link:hover{color:var(--g);border-color:rgba(62,207,142,.2)}
+
+/* ADD FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-field{margin-bottom:0}
+.form-field label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--w3);margin-bottom:7px;font-weight:500}
+.form-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 14px;color:var(--w);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:all .25s}
+.form-field input::placeholder{color:var(--w4)}
+.form-field input:focus{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04)}
+.form-actions{display:flex;gap:10px;margin-top:20px}
+
+/* GENERATED LINKS */
+.link-box{background:var(--d4);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.link-label{font-size:13px;font-weight:600;margin-bottom:3px}
+.link-url{font-size:11px;color:var(--w4);word-break:break-all}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 24px;color:var(--w4);font-size:14px}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* LOADING */
+.loading{text-align:center;padding:48px;color:var(--w4)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--g);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
 @media(max-width:900px){
-  .nav-links{display:none}
-  .problem-grid,.outcomes-grid,.flow-grid{grid-template-columns:1fr}
-  .how-steps{grid-template-columns:1fr 1fr}
-  .features-grid{grid-template-columns:1fr 1fr}
-  .pricing-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}
-  .faq-grid{grid-template-columns:1fr}
-  .why-grid{grid-template-columns:1fr 1fr}
-  .outcomes-visual{grid-template-columns:1fr 1fr}
+  .sidebar{display:none}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
 }
-@media(max-width:580px){
-  .how-steps{grid-template-columns:1fr}
-  .features-grid{grid-template-columns:1fr}
-  .why-grid{grid-template-columns:1fr}
-  .outcomes-visual{grid-template-columns:1fr}
-  .outcome-stat-card.full{grid-column:auto}
-  .hero-proof{gap:20px}
-  .proof-divider{display:none}
-  .nav-cta{padding:8px 16px;font-size:12px}
-  footer{justify-content:center;text-align:center}
+@media(max-width:500px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .main-content{padding:20px 16px}
 }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<header class="nav" id="nav">
-  <div class="nav-inner">
-    <div class="nav-logo">REFILL</div>
-    <ul class="nav-links">
-      <li><a href="#how">How It Works</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#faq">FAQ</a></li>
-    </ul>
-    <button class="nav-cta" onclick="openModal('')">Get Started</button>
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-glow"></div>
+  <div class="login-card">
+    <div class="login-logo">REFILL</div>
+    <div class="login-sub">Admin Panel</div>
+    <h2 class="login-title">Welcome back.</h2>
+    <p class="login-desc">Sign in to manage all your restaurants.</p>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••">
+    </div>
+    <p class="login-err" id="login-err">Incorrect username or password</p>
+    <button class="btn-green" onclick="doLogin()">Sign In →</button>
   </div>
-</header>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="tag"><span class="tag-dot"></span>WhatsApp Customer Retention for Restaurants</div>
-  <h1 class="hero-title">Your Restaurant<br>Is Losing <em>Repeat Customers</em><br>Every Single Week.</h1>
-  <p class="hero-sub">Refill automatically detects when customers go quiet — and sends personalised WhatsApp messages that bring them back. No manual follow-up. No extra staff. Just more repeat visits.</p>
-  <div class="hero-actions">
-    <button class="btn-primary" onclick="openModal('')">Get Refill for Your Restaurant →</button>
-    <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
-  </div>
-  <div class="hero-proof">
-    <div class="proof-item">
-      <div class="proof-num">30 Days</div>
-      <div class="proof-label">Inactivity Detection</div>
-    </div>
-    <div class="proof-divider"></div>
-    <div class="proof-item">
-      <div class="proof-num">8AM Daily</div>
-      <div class="proof-label">Automated Check</div>
-    </div>
-    <div class="proof-divider"></div>
-    <div class="proof-item">
-      <div class="proof-num">100%</div>
-      <div class="proof-label">WhatsApp Delivery</div>
-    </div>
-    <div class="proof-divider"></div>
-    <div class="proof-item">
-      <div class="proof-num">Zero</div>
-      <div class="proof-label">Manual Follow-Up</div>
-    </div>
-  </div>
-</section>
-
-<!-- PROBLEM -->
-<section class="problem-section" id="problem">
-  <div class="container">
-    <div class="problem-grid">
-      <div class="problem-text reveal">
-        <div class="section-label">The Problem</div>
-        <h2 class="problem-headline">Most restaurants lose <span>40–60%</span> of customers quietly — and never know why.</h2>
-        <p class="problem-body">A customer visits your restaurant, enjoys the meal, and leaves satisfied. Then life gets busy. They don't come back next week, or the week after. No complaint was made. No bad review was left. They simply moved on — because nobody followed up.</p>
-        <p class="problem-body">This is the silent revenue leak that kills repeat business. And your staff are too busy running service to track and re-engage customers manually.</p>
-      </div>
-      <div class="problem-cards reveal">
-        <div class="problem-card">
-          <div class="problem-card-icon">📉</div>
-          <div class="problem-card-text">
-            <strong>Lost revenue, not lost taste</strong>
-            Inactive customers didn't stop liking your food. They stopped being reminded to come back.
-          </div>
-        </div>
-        <div class="problem-card">
-          <div class="problem-card-icon">⏱️</div>
-          <div class="problem-card-text">
-            <strong>Staff have zero bandwidth</strong>
-            Your team is focused on cooking, serving, and managing daily operations. Customer retention becomes nobody's job.
-          </div>
-        </div>
-        <div class="problem-card">
-          <div class="problem-card-icon">🔕</div>
-          <div class="problem-card-text">
-            <strong>Silence is not loyalty</strong>
-            A customer who visited 3 months ago is not a loyal customer. They are a cold lead — and cold leads go to competitors.
-          </div>
-        </div>
-        <div class="problem-card">
-          <div class="problem-card-icon">💸</div>
-          <div class="problem-card-text">
-            <strong>Acquiring new customers costs 5x more</strong>
-            Retaining an existing customer is far cheaper than finding a new one. Yet most restaurants put all energy into acquisition.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="solution-section" id="how">
-  <div class="container">
-    <div class="solution-inner reveal">
-      <div class="section-label">The Solution</div>
-      <h2 class="solution-headline">Refill is your restaurant's automated retention engine.</h2>
-      <p class="solution-sub">It tracks every customer, detects inactivity, and sends personalised WhatsApp messages automatically — so no customer slips away unnoticed again.</p>
-    </div>
-    <div class="how-steps reveal">
-      <div class="how-step">
-        <div class="step-num">Step 01</div>
-        <div class="step-icon">📋</div>
-        <div class="step-title">Customer Registers Once</div>
-        <div class="step-desc">First-time visitors fill a short branded form — name, phone number, food preferences, birthday. Takes under 60 seconds. Done once, remembered forever.</div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">Step 02</div>
-        <div class="step-icon">📍</div>
-        <div class="step-title">Every Return Visit Is Logged</div>
-        <div class="step-desc">Staff check customers in with a simple one-tap page. No app needed. The system silently updates each customer's last visit date in real time.</div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">Step 03</div>
-        <div class="step-icon">🧠</div>
-        <div class="step-title">Inactivity Is Detected</div>
-        <div class="step-desc">Every morning at 8AM, Refill scans your customer list. Anyone inactive for 30 days or more is automatically flagged for reactivation.</div>
-      </div>
-      <div class="how-step">
-        <div class="step-num">Step 04</div>
-        <div class="step-icon">💬</div>
-        <div class="step-title">WhatsApp Sent Automatically</div>
-        <div class="step-desc">A personalised WhatsApp message goes out — addressed by name, referencing their favourite dish. No copy-pasting. No manual sending. Completely automatic.</div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:40px" class="reveal">
-      <button class="btn-primary" onclick="openModal('')">Set Up Refill for My Restaurant →</button>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features-section" id="features">
-  <div class="container">
-    <div class="features-header reveal">
-      <div class="section-label">What's Included</div>
-      <h2>A complete retention system. Not just a messaging tool.</h2>
-      <p>Every feature is designed to increase repeat visits, reduce staff workload, and give you visibility over customer behaviour.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feat-card reveal">
-        <div class="feat-icon-wrap">💬</div>
-        <div class="feat-title">Automated Win-Back Messages</div>
-        <div class="feat-desc">When a customer goes cold, Refill sends a personalised WhatsApp message automatically. No manual intervention required — ever.</div>
-      </div>
-      <div class="feat-card gold-feat reveal">
-        <div class="feat-icon-wrap">🎂</div>
-        <div class="feat-title">Birthday Messages</div>
-        <div class="feat-desc">On every customer's birthday, Refill sends a warm, personalised celebration message. A small gesture with a big impact on loyalty and return visits.</div>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon-wrap">📊</div>
-        <div class="feat-title">Customer Dashboard</div>
-        <div class="feat-desc">See your full customer base at a glance — who is active, who has gone cold, who was messaged, and who came back. Complete visibility, zero guesswork.</div>
-      </div>
-      <div class="feat-card gold-feat reveal">
-        <div class="feat-icon-wrap">🍽️</div>
-        <div class="feat-title">Food Preference Memory</div>
-        <div class="feat-desc">Every win-back message references the customer's favourite order. This personalisation dramatically improves the likelihood of a response and return visit.</div>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon-wrap">⚡</div>
-        <div class="feat-title">8AM Daily Automation</div>
-        <div class="feat-desc">The system runs automatically every morning — no one needs to log in, check anything, or take action. Retention runs silently in the background.</div>
-      </div>
-      <div class="feat-card gold-feat reveal">
-        <div class="feat-icon-wrap">🏪</div>
-        <div class="feat-title">Multi-Location Support</div>
-        <div class="feat-desc">Running more than one branch? Each location gets its own customer database, WhatsApp number, and automation — all managed from a single system.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- OUTCOMES -->
-<section class="outcomes-section">
-  <div class="container">
-    <div class="outcomes-grid">
-      <div class="outcomes-text reveal">
-        <div class="section-label">Business Outcomes</div>
-        <h2 class="outcomes-headline">What happens when customers keep coming back.</h2>
-        <p class="outcomes-sub">Retention is not a soft metric. It directly impacts revenue, operational efficiency, and the long-term value of your restaurant business.</p>
-        <div class="outcomes-list">
-          <div class="outcome-item">
-            <div class="outcome-check">✓</div>
-            <div class="outcome-text"><strong>Higher revenue per customer</strong> — Repeat customers spend more per visit and visit more frequently than first-timers.</div>
-          </div>
-          <div class="outcome-item">
-            <div class="outcome-check">✓</div>
-            <div class="outcome-text"><strong>Reduced marketing cost</strong> — Re-engaging existing customers via WhatsApp costs a fraction of acquiring new ones through ads.</div>
-          </div>
-          <div class="outcome-item">
-            <div class="outcome-check">✓</div>
-            <div class="outcome-text"><strong>Staff focus on service, not follow-up</strong> — Automation removes the burden of customer retention from your team entirely.</div>
-          </div>
-          <div class="outcome-item">
-            <div class="outcome-check">✓</div>
-            <div class="outcome-text"><strong>Stronger customer relationships</strong> — Personalised birthday messages and food-specific outreach make customers feel valued, not marketed to.</div>
-          </div>
-        </div>
-      </div>
-      <div class="outcomes-visual reveal">
-        <div class="outcome-stat-card">
-          <div class="outcome-stat-num">5×</div>
-          <div class="outcome-stat-label">Cheaper to retain a customer than acquire a new one</div>
-        </div>
-        <div class="outcome-stat-card">
-          <div class="outcome-stat-num">67%</div>
-          <div class="outcome-stat-label">Of repeat customers spend more than first-time visitors</div>
-        </div>
-        <div class="outcome-stat-card">
-          <div class="outcome-stat-num">Zero</div>
-          <div class="outcome-stat-label">Hours of staff time spent on customer follow-up</div>
-        </div>
-        <div class="outcome-stat-card full">
-          <div class="outcome-stat-num">WhatsApp</div>
-          <div class="outcome-stat-label">Nigeria's most-used messaging platform — your customers are already there</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY REFILL -->
-<section class="why-section">
-  <div class="container">
-    <div class="why-header reveal">
-      <div class="section-label">Why Restaurants Choose Refill</div>
-      <h2>Built specifically for how Nigerian restaurants operate.</h2>
-    </div>
-    <div class="why-grid">
-      <div class="why-card reveal">
-        <div class="why-num">01</div>
-        <div class="why-title">WhatsApp-First by Design</div>
-        <div class="why-desc">Your customers are not checking emails. They are on WhatsApp. Refill meets them exactly where they already are — making every message feel personal, not promotional.</div>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-num">02</div>
-        <div class="why-title">Simple Enough for Any Staff Member</div>
-        <div class="why-desc">No technical training required. Your front-of-house staff can operate the check-in system in under two minutes. If they can use a phone, they can use Refill.</div>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-num">03</div>
-        <div class="why-title">Set Up Once, Runs Forever</div>
-        <div class="why-desc">After a one-time onboarding, the system runs daily without you touching it. No subscriptions to manage, no dashboards to check, no manual sending required.</div>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-num">04</div>
-        <div class="why-title">Built for Real Restaurant Owners</div>
-        <div class="why-desc">Not a generic CRM tool repurposed for food businesses. Refill was designed from the ground up for Nigerian restaurants — the food, the customers, the workflow.</div>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-num">05</div>
-        <div class="why-title">Personalisation That Actually Works</div>
-        <div class="why-desc">Generic "we miss you" messages get ignored. Refill mentions the customer's name and their favourite dish — dramatically improving open rates and return visits.</div>
-      </div>
-      <div class="why-card reveal">
-        <div class="why-num">06</div>
-        <div class="why-title">Scalable Across Locations</div>
-        <div class="why-desc">Whether you run one branch or five, Refill scales with you. Each location operates independently under the same system — no additional complexity.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="pricing-section" id="pricing">
-  <div class="container">
-    <div class="pricing-header reveal">
-      <div class="section-label">Pricing</div>
-      <h2>Straightforward pricing. Measurable returns.</h2>
-      <p>One setup investment. One monthly operational fee. No per-message charges. No hidden costs. No surprises.</p>
-    </div>
-    <div class="pricing-grid reveal">
-
-      <!-- STARTER -->
-      <div class="price-card">
-        <div class="price-plan">Starter</div>
-        <div class="price-amount">₦80,000<sub>/mo</sub></div>
-        <div class="price-setup">+ ₦100,000 one-time setup</div>
-        <div class="price-setup-note">Setup covers full onboarding, branded form configuration, WhatsApp integration, and staff training.</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Up to 500 customers</li>
-          <li>Automated win-back messages</li>
-          <li>Birthday messages</li>
-          <li>Customer dashboard</li>
-          <li>Staff check-in page</li>
-          <li>Food preference tracking</li>
-          <li>Email support</li>
-        </ul>
-        <button class="price-btn price-btn-outline" onclick="openModal('Starter')">Get Started →</button>
-      </div>
-
-      <!-- GROWTH -->
-      <div class="price-card featured">
-        <div class="price-badge">Most Popular</div>
-        <div class="price-plan">Growth</div>
-        <div class="price-amount">₦150,000<sub>/mo</sub></div>
-        <div class="price-setup">+ ₦150,000 one-time setup</div>
-        <div class="price-setup-note">Includes everything in Starter plus priority setup, advanced reporting, and dedicated onboarding support.</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Up to 2,000 customers</li>
-          <li>Automated win-back messages</li>
-          <li>Birthday messages</li>
-          <li>Customer dashboard</li>
-          <li>Staff check-in page</li>
-          <li>Food preference analytics</li>
-          <li>Comeback rate reporting</li>
-          <li>Priority support</li>
-        </ul>
-        <button class="price-btn price-btn-solid" onclick="openModal('Growth')">Get Started →</button>
-      </div>
-
-      <!-- PRO -->
-      <div class="price-card">
-        <div class="price-plan">Pro</div>
-        <div class="price-amount">₦300,000<sub>/mo</sub></div>
-        <div class="price-setup">+ ₦250,000 one-time setup</div>
-        <div class="price-setup-note">Built for multi-location restaurants and high-volume operations. Includes full system customisation and a dedicated account manager.</div>
-        <div class="price-divider"></div>
-        <ul class="price-features">
-          <li>Unlimited customers</li>
-          <li>Automated win-back messages</li>
-          <li>Birthday messages</li>
-          <li>Full analytics dashboard</li>
-          <li>Multi-location support</li>
-          <li>Staff check-in pages per branch</li>
-          <li>Custom message templates</li>
-          <li>Dedicated account manager</li>
-        </ul>
-        <button class="price-btn price-btn-outline" onclick="openModal('Pro')">Get Started →</button>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-section" id="faq">
-  <div class="container">
-    <div class="faq-header reveal">
-      <div class="section-label">Common Questions</div>
-      <h2>Everything you need to know before getting started.</h2>
-    </div>
-    <div class="faq-grid reveal">
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          How does Refill send WhatsApp messages?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Refill uses the official WhatsApp Business API to send messages directly from your restaurant's WhatsApp number. Messages are delivered just like a normal WhatsApp chat — customers see your restaurant's name and can reply naturally.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Do I need to download any app?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">No app downloads required. Refill runs entirely through web-based tools — your customer form, staff check-in page, and dashboard are all accessible from any browser on any device.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Can my staff use it without training?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Yes. The staff check-in process takes under 2 minutes to learn. Staff simply open a page, enter the customer's phone number, and tap confirm. That's the full interaction required from your team.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Can it work for more than one branch?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Absolutely. Multi-location support is built into the Growth and Pro plans. Each branch has its own customer database, check-in page, and WhatsApp number — all managed within the same Refill system.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          How long does setup take?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Most restaurants are fully live within 24 to 48 hours of onboarding. This includes your branded customer form, staff check-in page, WhatsApp integration, and the automated daily system. We handle the entire setup process.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What if I already have customer phone numbers?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Existing customer numbers can be imported into your Refill database during onboarding. We will work with you to migrate your existing contacts so no customer is left behind from day one.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          Is Refill suitable for small restaurants?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">Yes. The Starter plan is designed for growing restaurants with up to 500 customers. If you are serving regular customers and want to retain them systematically, Refill will deliver measurable value regardless of your size.</div>
-        </div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          What happens after I contact you?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-a">
-          <div class="faq-a-inner">After you submit your details, we contact you on WhatsApp within 24 hours. We will discuss your restaurant, confirm the right plan, collect the setup fee, and begin onboarding immediately. The whole process is handled by our team.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="cta-section">
-  <div class="cta-bg"></div>
-  <div class="cta-inner reveal">
-    <div class="section-label">Ready to Start?</div>
-    <h2 class="cta-headline">Stop losing customers<br>to silence.</h2>
-    <p class="cta-sub">Every week you wait is another week of repeat customers walking away without being followed up. Refill fixes this permanently — automatically, quietly, and effectively.</p>
-    <button class="btn-primary" style="font-size:15px;padding:17px 40px" onclick="openModal('')">Get Refill for My Restaurant →</button>
-    <p style="font-size:12px;color:var(--w4);margin-top:16px">We will contact you on WhatsApp within 24 hours.</p>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<div class="footer">
-  <div class="footer-logo">REFILL</div>
-  <div class="footer-text">© 2026 Refill. Built for Nigerian restaurants.</div>
-  <div class="footer-text">Never lose a customer again.</div>
 </div>
 
-<!-- MODAL -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modal-top-bar"></div>
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div id="m-form">
-      <div class="modal-label">Get Started</div>
-      <h3 class="modal-title">Let's get your restaurant set up.</h3>
-      <p class="modal-sub">Fill in your details — your signup form and dashboard will be created automatically.</p>
-      <div class="field">
-        <label>Your Name</label>
-        <input type="text" id="f-name" placeholder="e.g. Adaeze Okonkwo" autocomplete="off">
+<!-- APP -->
+<div class="app" id="app">
+  <div class="nav">
+    <div class="nav-left">
+      <div class="nav-logo">REFILL</div>
+      <div class="nav-badge">Admin Panel</div>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user">👤 Admin</span>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">Menu</div>
+        <div class="sidebar-item active" onclick="showPage('overview',this)"><span class="sidebar-icon">📊</span>Overview</div>
+        <div class="sidebar-item" onclick="showPage('restaurants',this)"><span class="sidebar-icon">🏪</span>Restaurants</div>
+        <div class="sidebar-item" onclick="showPage('leads',this)"><span class="sidebar-icon">🔥</span>Leads</div>
+        <div class="sidebar-item" onclick="showPage('add',this)"><span class="sidebar-icon">➕</span>Add Restaurant</div>
       </div>
-      <div class="field">
-        <label>Restaurant Name</label>
-        <input type="text" id="f-restaurant" placeholder="e.g. Mama's Kitchen" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>Restaurant Tagline</label>
-        <input type="text" id="f-tagline" placeholder="e.g. Best Grills in Lagos" autocomplete="off">
-      </div>
-      <div class="field">
-        <label>WhatsApp Number</label>
-        <input type="tel" id="f-phone" placeholder="e.g. 08012345678">
-      </div>
-      <div class="field">
-        <label>Brand Color (pick your restaurant color)</label>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px">
-          <input type="color" id="f-color" value="#D4AF37" style="width:48px;height:48px;border:2px solid rgba(255,255,255,.1);border-radius:8px;background:none;cursor:pointer;padding:2px">
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div onclick="setColor('#D4AF37')" style="width:32px;height:32px;border-radius:50%;background:#D4AF37;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
-            <div onclick="setColor('#FF6B35')" style="width:32px;height:32px;border-radius:50%;background:#FF6B35;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
-            <div onclick="setColor('#52B788')" style="width:32px;height:32px;border-radius:50%;background:#52B788;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
-            <div onclick="setColor('#4A90E2')" style="width:32px;height:32px;border-radius:50%;background:#4A90E2;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
-            <div onclick="setColor('#E74C3C')" style="width:32px;height:32px;border-radius:50%;background:#E74C3C;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
-            <div onclick="setColor('#9B59B6')" style="width:32px;height:32px;border-radius:50%;background:#9B59B6;cursor:pointer;border:2px solid rgba(255,255,255,.2)"></div>
+    </div>
+
+    <div class="main-content">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <h1 class="page-title">Overview</h1>
+        <p class="page-sub">All restaurants and key metrics at a glance.</p>
+        <div class="stats-row">
+          <div class="stat-box green"><div class="stat-icon">🏪</div><div class="stat-num" id="ov-restaurants">—</div><div class="stat-lbl">Restaurants</div></div>
+          <div class="stat-box gold"><div class="stat-icon">👥</div><div class="stat-num" id="ov-customers">—</div><div class="stat-lbl">Total Customers</div></div>
+          <div class="stat-box red"><div class="stat-icon">🔴</div><div class="stat-num" id="ov-cold">—</div><div class="stat-lbl">Cold Customers</div></div>
+          <div class="stat-box blue"><div class="stat-icon">🔥</div><div class="stat-num" id="ov-leads">—</div><div class="stat-lbl">New Leads</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🏪 All Restaurants</div>
+            <button class="btn-sm btn-sm-green" onclick="showPage('add',document.querySelectorAll('.sidebar-item')[3])">+ Add New</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>ID</th><th>Owner</th><th>Cold Days</th><th>Date Added</th><th>Links</th></tr></thead>
+              <tbody id="ov-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="field">
-        <label>Plan You're Interested In</label>
-        <select id="f-plan">
-          <option value="" disabled selected>Select a plan</option>
-          <option value="Starter">Starter — ₦80,000/mo</option>
-          <option value="Growth">Growth — ₦150,000/mo</option>
-          <option value="Pro">Pro — ₦300,000/mo</option>
-          <option value="Not sure">Not sure yet</option>
-        </select>
+
+      <!-- RESTAURANTS -->
+      <div class="page" id="page-restaurants">
+        <h1 class="page-title">Restaurants</h1>
+        <p class="page-sub">All onboarded restaurants with quick access links.</p>
+        <div class="rest-grid" id="rest-grid"><div class="loading"><div class="spinner"></div></div></div>
       </div>
-      <p class="m-err" id="m-err">Please fill in all fields to continue.</p>
-      <button class="m-submit" id="m-btn" onclick="submitLead()">Submit — We'll Contact You on WhatsApp</button>
-      <p class="m-note">No spam. No unsolicited calls. Just a direct conversation about your restaurant.</p>
-    </div>
-    <div class="m-success" id="m-success">
-      <div class="success-icon">✅</div>
-      <div class="success-title">You're In.</div>
-      <p class="success-msg">
-        Thanks, <strong id="s-name" style="color:var(--g)"></strong>.<br><br>
-        We've received your details for <strong id="s-rest" style="color:var(--w)"></strong> and will reach out on WhatsApp within 24 hours to get you started.<br><br>
-        Get ready to retain more customers — automatically.
-      </p>
+
+      <!-- LEADS -->
+      <div class="page" id="page-leads">
+        <h1 class="page-title">Leads</h1>
+        <p class="page-sub">Restaurant owners who expressed interest from your website.</p>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🔥 All Leads</div>
+            <div id="leads-count" style="font-size:12px;color:var(--w3)">Loading...</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Restaurant</th><th>Phone</th><th>Plan</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="leads-table"><tr><td colspan="6"><div class="loading"><div class="spinner"></div></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD RESTAURANT -->
+      <div class="page" id="page-add">
+        <h1 class="page-title">Add Restaurant</h1>
+        <p class="page-sub">Onboard a new restaurant to Refill. Fill in all details below.</p>
+        <div class="card">
+          <div class="card-header"><div class="card-title">➕ New Restaurant Details</div></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-field">
+                <label>Restaurant ID * (no spaces, lowercase)</label>
+                <input type="text" id="add-id" placeholder="e.g. brandas">
+              </div>
+              <div class="form-field">
+                <label>Restaurant Name *</label>
+                <input type="text" id="add-name" placeholder="e.g. Brandas Food">
+              </div>
+              <div class="form-field">
+                <label>Owner Name *</label>
+                <input type="text" id="add-owner" placeholder="e.g. Chidi Okafor">
+              </div>
+              <div class="form-field">
+                <label>WhatsApp Number *</label>
+                <input type="tel" id="add-phone" placeholder="e.g. 2348012345678">
+              </div>
+              <div class="form-field">
+                <label>Green API Instance ID *</label>
+                <input type="text" id="add-instance" placeholder="e.g. 7107596960">
+              </div>
+              <div class="form-field">
+                <label>Green API Token *</label>
+                <input type="text" id="add-token" placeholder="Paste token here">
+              </div>
+              <div class="form-field">
+                <label>Cold Days Threshold</label>
+                <input type="number" id="add-cold" placeholder="30" value="30">
+              </div>
+            </div>
+            <p id="add-err" style="color:var(--red);font-size:12px;margin-top:12px;display:none">Please fill in all required fields</p>
+            <p id="add-success" style="color:var(--g);font-size:12px;margin-top:12px;display:none">✅ Restaurant added successfully!</p>
+            <div class="form-actions">
+              <button class="btn-sm btn-sm-green" style="padding:11px 24px;font-size:13px" onclick="addRestaurant()">Add Restaurant →</button>
+              <button class="btn-sm btn-sm-outline" style="padding:11px 24px;font-size:13px" onclick="clearForm()">Clear</button>
+            </div>
+            <div id="generated-links" style="display:none;margin-top:28px">
+              <div style="height:1px;background:var(--border);margin-bottom:20px"></div>
+              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;color:var(--g)">✅ Share These Links With The Restaurant</div>
+              <div id="links-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
 <script>
-var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymZU2pqjs0vZwc0K0SgE67393Qls-zoWoQJHfPtWYcYuSPfP21fENaZTIeDIg1r_-b7w/exec';
+var ADMIN_USER = 'admin';
+var ADMIN_PASS = 'refill2026';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwebL9ZOkGwnzlXRJgp5Y6CaukjFnWlfbUAcEacecD7qgG3jjjaGfSMnQXmOW3AFdF1/exec';
+var SHEET_ID = '1b0-FpqArRYBMhkaNdSxz-jro1hhqETq2Q-jOmYDfKm4';
+var BASE_URL = 'https://logical46.github.io/Refill-/';
+var restaurants = [];
+var leads = [];
 
-// NAV scroll
-window.addEventListener('scroll', function() {
-  var nav = document.getElementById('nav');
-  if (window.scrollY > 40) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-});
-
-// MODAL
-function openModal(plan) {
-  document.getElementById('m-form').style.display = 'block';
-  document.getElementById('m-success').style.display = 'none';
-  document.getElementById('m-btn').innerHTML = 'Submit — We\'ll Contact You on WhatsApp';
-  document.getElementById('m-btn').disabled = false;
-  document.getElementById('m-err').style.display = 'none';
-  if (plan) document.getElementById('f-plan').value = plan;
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+// LOGIN
+function doLogin() {
+  var u = document.getElementById('login-user').value.trim();
+  var p = document.getElementById('login-pass').value.trim();
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    document.getElementById('login-wrap').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+  }
 }
 
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow = '';
+function doLogout() {
+  document.getElementById('login-wrap').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
 }
-
-document.getElementById('overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('login-wrap').style.display !== 'none') doLogin();
 });
 
-// SUBMIT
-function setColor(hex) {
-  document.getElementById('f-color').value = hex;
+// NAVIGATION
+function showPage(page, el) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-item').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('page-' + page).classList.add('active');
+  if (el) el.classList.add('active');
 }
 
-function submitLead() {
-  var name       = document.getElementById('f-name').value.trim();
-  var restaurant = document.getElementById('f-restaurant').value.trim();
-  var tagline    = document.getElementById('f-tagline').value.trim() || 'Food & Dining';
-  var phone      = document.getElementById('f-phone').value.trim();
-  var color      = document.getElementById('f-color').value || '#D4AF37';
-  var plan       = document.getElementById('f-plan').value;
+// LOAD DATA
+function loadAll() {
+  loadRestaurants();
+  loadLeads();
+}
 
-  if (!name || !restaurant || !phone || !plan) {
-    document.getElementById('m-err').style.display = 'block';
+var RESTAURANTS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp6iuAs0sH6_8RDwN4CE_mZOJZbZ0KS_7xyC1UnSNhHvB9e95jHM7V7W73mDbC2zEc_7iS9bitEdV/pub?gid=0&single=true&output=csv';
+var LEADS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfI9JidUMXIT3inZTKLbiWKUAAUnysh_g4e5Q6JB_GeEH4FaESO_D6lbTuHnGFsStnfrVnn0cZojEs/pub?output=csv';
+
+function csvUrl(gid) {
+  if (gid === 0) return RESTAURANTS_CSV + '&t=' + Date.now();
+  if (gid === 2) return LEADS_CSV + '&t=' + Date.now();
+  return RESTAURANTS_CSV + '&t=' + Date.now();
+}
+
+function loadRestaurants() {
+  fetch(csvUrl(0))
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      restaurants = parseCSV(csv);
+      renderOverview();
+      renderRestaurants();
+    })
+    .catch(function() {
+      restaurants = [];
+      renderOverview();
+      renderRestaurants();
+    });
+}
+
+function loadLeads() {
+  fetch(csvUrl(2))
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      leads = parseCSV(csv);
+      renderLeads();
+      document.getElementById('ov-leads').textContent = leads.length;
+    })
+    .catch(function() {
+      leads = [];
+      renderLeads();
+    });
+}
+
+function parseCSV(csv) {
+  var lines = csv.trim().split('\n');
+  var result = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = splitCSV(lines[i]);
+    if (!cols[0] || cols[0].trim() === '') continue;
+    result.push(cols.map(function(c) { return c.trim().replace(/^"|"$/g,''); }));
+  }
+  return result;
+}
+
+function splitCSV(line) {
+  var result = [], cur = '', inQ = false;
+  for (var i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; }
+    else if (line[i] === ',' && !inQ) { result.push(cur); cur = ''; }
+    else { cur += line[i]; }
+  }
+  result.push(cur);
+  return result;
+}
+
+function formatDate(str) {
+  if (!str) return '—';
+  var d = new Date(str);
+  if (isNaN(d)) return str;
+  return d.toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// RENDER OVERVIEW
+function renderOverview() {
+  document.getElementById('ov-restaurants').textContent = restaurants.length;
+  var html = '';
+  if (restaurants.length === 0) {
+    html = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">🏪</div>No restaurants yet.</div></td></tr>';
+  } else {
+    restaurants.forEach(function(r) {
+      html += '<tr>' +
+        '<td><strong>' + (r[1]||'—') + '</strong></td>' +
+        '<td><span class="badge badge-gold">' + (r[0]||'—') + '</span></td>' +
+        '<td style="color:var(--w3)">' + (r[2]||'—') + '</td>' +
+        '<td style="color:var(--w3)">' + (r[6]||'30') + ' days</td>' +
+        '<td style="color:var(--w3)">' + formatDate(r[7]) + '</td>' +
+        '<td style="display:flex;gap:6px;flex-wrap:wrap">' +
+        '<a class="rest-link" href="' + BASE_URL + 'checkin.html" target="_blank">📍 Check-in</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'dashboard.html" target="_blank">📊 Dashboard</a>' +
+        '</td></tr>';
+    });
+  }
+  document.getElementById('ov-table').innerHTML = html;
+  document.getElementById('ov-customers').textContent = '—';
+  document.getElementById('ov-cold').textContent = '—';
+}
+
+// RENDER RESTAURANTS
+function renderRestaurants() {
+  var html = '';
+  if (restaurants.length === 0) {
+    html = '<div class="empty"><div class="empty-icon">🏪</div>No restaurants yet.<br>Add your first restaurant to get started.</div>';
+  } else {
+    restaurants.forEach(function(r) {
+      var id = r[0] || '';
+      var name = r[1] || '';
+      var owner = r[2] || '';
+      html += '<div class="rest-card">' +
+        '<div class="rest-name">' + name + '</div>' +
+        '<div class="rest-id">ID: ' + id + ' &nbsp;|&nbsp; Owner: ' + owner + '</div>' +
+        '<div class="rest-actions">' +
+        '<a class="rest-link" href="' + BASE_URL + 'index.html" target="_blank">📋 Signup Form</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'checkin.html" target="_blank">📍 Check-in</a>' +
+        '<a class="rest-link" href="' + BASE_URL + 'dashboard.html" target="_blank">📊 Dashboard</a>' +
+        '</div></div>';
+    });
+  }
+  document.getElementById('rest-grid').innerHTML = html;
+}
+
+// RENDER LEADS
+function renderLeads() {
+  document.getElementById('leads-count').textContent = leads.length + ' total leads';
+  var html = '';
+  if (leads.length === 0) {
+    html = '<tr><td colspan="6"><div class="empty"><div class="empty-icon">🔥</div>No leads yet. Share your website to get leads.</div></td></tr>';
+  } else {
+    leads.slice().reverse().forEach(function(l) {
+      html += '<tr>' +
+        '<td><strong>' + (l[0]||'—') + '</strong></td>' +
+        '<td>' + (l[1]||'—') + '</td>' +
+        '<td style="color:var(--w3)">' + (l[2]||'—') + '</td>' +
+        '<td><span class="badge badge-gold">' + (l[3]||'—') + '</span></td>' +
+        '<td style="color:var(--w3)">' + formatDate(l[4]) + '</td>' +
+        '<td><span class="badge badge-green"><span class="badge-dot"></span>' + (l[5]||'New') + '</span></td>' +
+        '</tr>';
+    });
+  }
+  document.getElementById('leads-table').innerHTML = html;
+}
+
+// ADD RESTAURANT
+function addRestaurant() {
+  var id       = document.getElementById('add-id').value.trim().toLowerCase().replace(/\s/g,'');
+  var name     = document.getElementById('add-name').value.trim();
+  var owner    = document.getElementById('add-owner').value.trim();
+  var phone    = document.getElementById('add-phone').value.trim();
+  var instance = document.getElementById('add-instance').value.trim();
+  var token    = document.getElementById('add-token').value.trim();
+  var cold     = document.getElementById('add-cold').value.trim() || '30';
+
+  document.getElementById('add-err').style.display = 'none';
+  document.getElementById('add-success').style.display = 'none';
+
+  if (!id || !name || !owner || !phone || !instance || !token) {
+    document.getElementById('add-err').style.display = 'block';
     return;
   }
-
-  document.getElementById('m-err').style.display = 'none';
-  var btn = document.getElementById('m-btn');
-  btn.innerHTML = 'Sending... <span class="spin"></span>';
-  btn.disabled = true;
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', SCRIPT_URL, true);
   xhr.setRequestHeader('Content-Type', 'text/plain');
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
-      showSuccess(name, restaurant);
+      document.getElementById('add-success').style.display = 'block';
+      showLinks(id, name);
+      setTimeout(loadAll, 2000);
     }
   };
   xhr.onerror = function() {
-    showSuccess(name, restaurant);
+    document.getElementById('add-success').style.display = 'block';
+    showLinks(id, name);
   };
   xhr.send(JSON.stringify({
-    name:       name,
-    restaurant: restaurant,
-    tagline:    tagline,
-    phone:      phone,
-    color:      color,
-    plan:       plan,
-    date:       new Date().toISOString()
+    type:'addRestaurant', id:id, name:name, owner:owner,
+    phone:phone, instance:instance, token:token, coldDays:cold
   }));
 }
 
-function showSuccess(name, restaurant) {
-  document.getElementById('s-name').textContent = name;
-  document.getElementById('s-rest').textContent = restaurant;
-  document.getElementById('m-form').style.display = 'none';
-  document.getElementById('m-success').style.display = 'block';
+function showLinks(id, name) {
+  var links = [
+    { label:'📋 Customer Signup Form', url: BASE_URL + 'index.html' },
+    { label:'📍 Staff Check-In Page',  url: BASE_URL + 'checkin.html' },
+    { label:'📊 Restaurant Dashboard', url: BASE_URL + 'dashboard.html' }
+  ];
+  var html = links.map(function(l) {
+    return '<div class="link-box">' +
+      '<div><div class="link-label">' + l.label + '</div>' +
+      '<div class="link-url">' + l.url + '</div></div>' +
+      '<button class="btn-sm btn-sm-outline" onclick="copyLink(\'' + l.url + '\',this)">Copy</button>' +
+      '</div>';
+  }).join('');
+  document.getElementById('links-list').innerHTML = html;
+  document.getElementById('generated-links').style.display = 'block';
 }
 
-// FAQ
-function toggleFaq(btn) {
-  var item = btn.parentElement;
-  var isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(function(el) { el.classList.remove('open'); });
-  if (!isOpen) item.classList.add('open');
-}
-
-// SCROLL REVEAL
-var observer = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
+function copyLink(url, btn) {
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
   });
-}, { threshold: 0.08 });
+}
 
-document.querySelectorAll('.reveal').forEach(function(el, i) {
-  el.style.transitionDelay = (i % 3 * 0.1) + 's';
-  observer.observe(el);
-});
+function clearForm() {
+  ['add-id','add-name','add-owner','add-phone','add-instance','add-token'].forEach(function(id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('add-cold').value = '30';
+  document.getElementById('add-err').style.display = 'none';
+  document.getElementById('add-success').style.display = 'none';
+  document.getElementById('generated-links').style.display = 'none';
+}
 </script>
 </body>
 </html>
