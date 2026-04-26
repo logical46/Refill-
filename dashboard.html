@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>De Choice Mall — Customer Dashboard</title>
+<title>Brandas — Customer Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -289,6 +289,67 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 
 <script>
+var MASTER_RESTAURANTS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRlp6iuAs0sH6_8RDwN4CE_mZOJZbZ0KS_7xyC1UnSNhHvB9e95jHM7V7W73mDbC2zEc_7iS9bitEdV/pub?gid=0&single=true&output=csv';
+var MASTER_SHEET_ID = '1b0-FpqArRYBMhkaNdSxz-jro1hhqETq2Q-jOmYDfKm4';
+
+function getRestaurantId() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('r') || 'brandas';
+}
+
+function getPublishedCSV(restaurantId) {
+  // Each restaurant's customer sheet is published separately
+  // For now use the master sheet export with restaurant tab
+  return 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTT0CNwrGwVW3myTV1_zW-VpyHGZQpfQ42kFElj9MyZksE04di4LTDsVB5IWESCKpdw36onLAYt1jSZ/pub?gid=0&single=true&output=csv';
+}
+
+function loadRestaurantBranding(restaurantId, callback) {
+  fetch(MASTER_RESTAURANTS_CSV + '&t=' + Date.now())
+    .then(function(r) { return r.text(); })
+    .then(function(csv) {
+      var lines = csv.trim().split('\n');
+      for (var i = 1; i < lines.length; i++) {
+        var cols = splitCSVLine(lines[i]);
+        if (cols[0] && cols[0].trim().toLowerCase() === restaurantId.toLowerCase()) {
+          callback({
+            id:      cols[0].trim(),
+            name:    cols[1] ? cols[1].trim() : restaurantId.toUpperCase(),
+            tagline: cols[8] ? cols[8].trim() : 'Food & Dining',
+            color:   cols[9] ? cols[9].trim() : '#D4AF37'
+          });
+          return;
+        }
+      }
+      // Not found — use defaults
+      callback({ id: restaurantId, name: restaurantId.toUpperCase(), tagline: 'Food & Dining', color: '#D4AF37' });
+    })
+    .catch(function() {
+      callback({ id: restaurantId, name: restaurantId.toUpperCase(), tagline: 'Food & Dining', color: '#D4AF37' });
+    });
+}
+
+function applyBranding(rest) {
+  document.title = rest.name + ' — Dashboard';
+  var logo = document.querySelector('.nav-logo');
+  if (logo) logo.textContent = rest.name;
+  var sub = document.querySelector('.page-sub');
+  if (sub) sub.textContent = 'Real-time customer data for ' + rest.name;
+
+  // Apply color
+  var color = rest.color || '#D4AF37';
+  document.documentElement.style.setProperty('--gold', color);
+  document.documentElement.style.setProperty('--gold-l', color);
+  document.documentElement.style.setProperty('--orange', color);
+
+  // Color stat cards
+  document.querySelectorAll('.stat-card.total .stat-num').forEach(function(el) {
+    el.style.background = 'linear-gradient(135deg,' + color + ',#F0D060)';
+    el.style.webkitBackgroundClip = 'text';
+    el.style.webkitTextFillColor = 'transparent';
+    el.style.backgroundClip = 'text';
+  });
+}
+
 var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTT0CNwrGwVW3myTV1_zW-VpyHGZQpfQ42kFElj9MyZksE04di4LTDsVB5IWESCKpdw36onLAYt1jSZ/pub?gid=0&single=true&output=csv';
 
 function loadData() {
@@ -504,7 +565,11 @@ function renderDashboard(customers) {
 }
 
 // Load on start
-loadData();
+var currentRestaurantId = getRestaurantId();
+loadRestaurantBranding(currentRestaurantId, function(rest) {
+  applyBranding(rest);
+  loadData();
+});
 
 // Auto refresh every 5 minutes
 setInterval(loadData, 5 * 60 * 1000);
