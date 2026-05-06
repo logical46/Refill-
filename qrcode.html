@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--primary:#D4AF37;--d:#080808;--w:#fff;--gr:#777}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--d);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+
+/* LOADING */
+.loading{text-align:center;padding:60px}
+.spinner{width:36px;height:36px;border:3px solid rgba(212,175,55,.2);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CARD */
+.qr-card{width:100%;max-width:420px;background:var(--w);border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.5);display:none}
+
+/* HEADER */
+.card-header{padding:32px 32px 24px;text-align:center;position:relative}
+.card-header::after{content:'';position:absolute;bottom:0;left:32px;right:32px;height:1px;background:rgba(0,0,0,.08)}
+.rest-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,5vw,36px);letter-spacing:4px;margin-bottom:6px;color:#111}
+.rest-tagline{font-size:13px;color:#888;letter-spacing:2px;text-transform:uppercase}
+.color-bar{height:5px;width:100%;margin-bottom:24px}
+
+/* QR SECTION */
+.qr-section{padding:28px 32px;text-align:center}
+.qr-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;margin-bottom:16px;font-weight:600}
+.qr-wrap{width:220px;height:220px;margin:0 auto 20px;padding:12px;border:2px solid rgba(0,0,0,.08);border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center}
+.qr-wrap canvas, .qr-wrap img{width:100% !important;height:100% !important}
+.qr-url{font-size:11px;color:#999;word-break:break-all;margin-bottom:20px;padding:0 16px}
+
+/* FOOTER */
+.card-footer{padding:20px 32px 28px;text-align:center;border-top:1px solid rgba(0,0,0,.08)}
+.footer-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+.step-item{text-align:center}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;margin:0 auto 6px}
+.step-text{font-size:11px;color:#666;line-height:1.4}
+.powered{font-size:10px;color:#bbb;letter-spacing:2px;text-transform:uppercase}
+.powered span{font-weight:700;color:#888}
+
+/* ACTIONS */
+.actions{margin-top:24px;display:flex;gap:12px;justify-content:center}
+.btn-print{background:var(--primary);color:#000;border:none;padding:12px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-print:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,.3)}
+.btn-copy{background:none;color:var(--w);border:1px solid rgba(255,255,255,.2);padding:12px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-copy:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.05)}
+
+/* ERROR */
+.error-state{text-align:center;padding:60px 24px;display:none}
+.error-icon{font-size:48px;margin-bottom:16px}
+.error-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--primary);margin-bottom:8px}
+.error-sub{font-size:14px;color:var(--gr)}
+
+@media print{
+  body{background:#fff;padding:0}
+  .actions{display:none}
+  .qr-card{box-shadow:none;max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:var(--gr)">Loading QR code...</div>
+</div>
+
+<div class="error-state" id="error">
+  <div class="error-icon">⚠️</div>
+  <div class="error-title">Not Found</div>
+  <div class="error-sub">Invalid restaurant link.<br>Please contact Refill support.</div>
+</div>
+
+<div class="qr-card" id="qr-card">
+  <div class="color-bar" id="color-bar"></div>
+  <div class="card-header">
+    <div class="rest-logo" id="rest-name">BRANDAS</div>
+    <div class="rest-tagline" id="rest-tagline">Food & Dining</div>
+  </div>
+  <div class="qr-section">
+    <div class="qr-label">Scan to join our VIP list</div>
+    <div class="qr-wrap" id="qr-wrap"></div>
+    <div class="qr-url" id="qr-url"></div>
+  </div>
+  <div class="card-footer">
+    <div class="footer-steps">
+      <div class="step-item">
+        <div class="step-num" id="step1-num" style="background:#D4AF37">1</div>
+        <div class="step-text">Scan the QR code</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" id="step2-num" style="background:#D4AF37">2</div>
+        <div class="step-text">Fill your details</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num" id="step3-num" style="background:#D4AF37">3</div>
+        <div class="step-text">Get exclusive offers</div>
+      </div>
+    </div>
+    <div class="powered">Powered by <span>REFILL</span></div>
+  </div>
+</div>
+
+<div class="actions" id="actions">
+  <button class="btn-print" onclick="window.print()">🖨️ Print QR Code</button>
+  <button class="btn-copy" id="copy-btn" onclick="copyLink()">📋 Copy Link</button>
+</div>
+
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbyEp6daTD2CPcQwB55Th5JAxAjtcPBi3ZjJHfb5y6Sn66i4CweY067tqPvj6LmQP-dI/exec';
+var BASE_URL = 'https://logical46.github.io/Refill-/';
+var restaurantId = new URLSearchParams(window.location.search).get('r') || '';
+var signupURL = '';
+
+function init() {
+  if (!restaurantId) {
+    showError();
+    return;
+  }
+
+  signupURL = BASE_URL + 'signup.html?r=' + restaurantId;
+
+  fetch(API_URL + '?action=restaurant&r=' + restaurantId)
+    .then(function(r) { return r.json(); })
+    .then(function(info) {
+      if (!info.success) {
+        // Use defaults if not found
+        renderQR(restaurantId.toUpperCase(), 'Food & Dining', '#D4AF37');
+        return;
+      }
+      renderQR(info.name, info.tagline || 'Food & Dining', info.color || '#D4AF37');
+    })
+    .catch(function() {
+      renderQR(restaurantId.toUpperCase(), 'Food & Dining', '#D4AF37');
+    });
+}
+
+function renderQR(name, tagline, color) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('qr-card').style.display = 'block';
+  document.getElementById('actions').style.display = 'flex';
+
+  document.title = name + ' — VIP QR Code';
+  document.getElementById('rest-name').textContent = name;
+  document.getElementById('rest-name').style.color = color;
+  document.getElementById('rest-tagline').textContent = tagline;
+  document.getElementById('color-bar').style.background = 'linear-gradient(90deg,' + color + ',#FF6B35)';
+  document.getElementById('qr-url').textContent = signupURL;
+
+  // Step numbers color
+  document.getElementById('step1-num').style.background = color;
+  document.getElementById('step2-num').style.background = color;
+  document.getElementById('step3-num').style.background = color;
+
+  // Apply color to body bg glow
+  document.body.style.background = 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0,0,0,.3) 0%, #080808 60%)';
+
+  // Generate QR code
+  document.getElementById('qr-wrap').innerHTML = '';
+  new QRCode(document.getElementById('qr-wrap'), {
+    text: signupURL,
+    width: 196,
+    height: 196,
+    colorDark: '#111111',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+function showError() {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('error').style.display = 'block';
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(signupURL).then(function() {
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(function() { btn.textContent = '📋 Copy Link'; }, 2000);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
